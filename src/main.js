@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import vuetify from './plugins/vuetify'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/'
 
@@ -14,5 +15,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')
