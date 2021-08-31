@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar app dark color="blue-grey darken-1" class="hidden-xs-and-down">
+    <v-app-bar dark color="blue-grey darken-1" class="hidden-xs-and-down">
       <v-toolbar-title>Commutify</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu left bottom>
@@ -18,8 +18,8 @@
       </v-menu>
     </v-app-bar>
 
-    <v-toolbar app dark color="blue-grey darken-3" class="hidden-sm-and-up">
-      <v-toolbar-title>Mobile Menu</v-toolbar-title>
+    <v-app-bar dark color="blue-grey darken-3" class="hidden-sm-and-up">
+      <v-app-bar-title>Mobile Menu</v-app-bar-title>
       <v-spacer></v-spacer>
 
       <v-dialog
@@ -28,15 +28,15 @@
         hide-overlay
         transition="dialog-bottom-transition"
       >
-        <v-toolbar-side-icon dark slot="activator"></v-toolbar-side-icon>
+        <!-- <v-app-bar-side-icon dark slot="activator"></v-app-bar-side-icon> -->
         <v-card>
-          <v-toolbar flat color="blue-grey darken-2">
-            <v-toolbar-title>Mobile Menu</v-toolbar-title>
+          <v-app-bar flat color="blue-grey darken-2">
+            <v-app-bar-title>Mobile Menu</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="dialog = false">
               <v-icon>close</v-icon>
             </v-btn>
-          </v-toolbar>
+          </v-app-bar>
 
           <v-list>
             <v-list-tile v-for="(item, index) in nav" :key="index" to="#">
@@ -52,14 +52,17 @@
           </v-list>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+    </v-app-bar>
   </nav>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      dialog:false,
+      nav: []
+    };
   },
 };
 </script>
