@@ -34,12 +34,12 @@
       <v-tabs-items v-model="tab">
         <v-tab-item key="Friends">
           <div flat v-for="friend in friends" :key="friend.id">
-            <Chat :user="friend" />
+            <ChatListItem :user="friend" />
           </div>
         </v-tab-item>
         <v-tab-item key="Groups">
           <div flat v-for="group in groups" :key="group.id">
-            <Chat :user="group" />
+            <ChatListItem :user="group" />
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -50,11 +50,11 @@
 
 <script>
 import axios from "axios";
-import Chat from "./Chat.vue";
+import ChatListItem from "./ChatListItem.vue";
 
 export default {
   components: {
-    Chat,
+    ChatListItem,
   },
   data() {
     return {

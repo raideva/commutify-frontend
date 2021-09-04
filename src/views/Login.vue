@@ -1,27 +1,6 @@
 <template>
   <div>
     <Navbar />
-    <!-- <div>
-      <label for="username">
-        <input
-          id="username"
-          v-model="username"
-          type="text"
-          name="username"
-          placeholder="Username"
-        />
-      </label>
-      <label for="password">
-        <input
-          id="password"
-          v-model="password"
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
-      </label>
-    </div>
-    <button type="submit" @click="login">Login</button> -->
     <v-main>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
