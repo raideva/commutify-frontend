@@ -15,9 +15,19 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-menu left bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item @click="logout()">
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <template v-slot:extension>
         <v-tabs v-model="tab" fixed-tabs>
@@ -33,13 +43,13 @@
     >
       <v-tabs-items v-model="tab">
         <v-tab-item key="Friends">
-          <div flat v-for="friend in friends" :key="friend.id">
-            <ChatListItem :user="friend" />
+          <div flat v-for="friend in friends" :key="friend.id" @click="displayChats(friend,1)">
+            <ChatListItem :user="friend"/>
           </div>
         </v-tab-item>
         <v-tab-item key="Groups">
-          <div flat v-for="group in groups" :key="group.id">
-            <ChatListItem :user="group" />
+          <div flat v-for="group in groups" :key="group.id"  @click="displayChats(group,0)">
+            <ChatListItem :user="group"/>
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -51,6 +61,7 @@
 <script>
 import axios from "axios";
 import ChatListItem from "./ChatListItem.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -65,6 +76,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      setToken: "auth/setToken",
+    }),
     getFriends() {
       console.log(this.$store.state.auth.token);
       axios({
@@ -82,8 +96,14 @@ export default {
         url: "api/groups/",
         method: "get",
       }).then((res) => {(this.groups = res.data);console.log(this.groups);});
-      
     },
+    displayChats(user,isFriend){
+      this.$parent.renderChat(user,isFriend);
+    },
+    logout(){
+      this.setToken(null,null);
+      this.$router.push('login/');
+    }
   },
   created() {
     this.getFriends();
@@ -93,12 +113,6 @@ export default {
 </script>
 
 <style>
-.chats {
-  overflow-y: scroll;
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-}
 .sidebar {
   overflow-y: scroll;
   width: 100%;
