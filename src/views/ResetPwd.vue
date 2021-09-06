@@ -44,7 +44,7 @@
                     type="email"
                     :readonly="otpsent"
                   ></v-text-field>
-                  <v-btn color="primary" v-if="!otpsent" @click="sendotp">Send OTP</v-btn>
+                  <v-btn color="primary" v-if="!otpsent" @click="sendotp()">Send OTP</v-btn>
                   <v-text-field
                     name="otp"
                     prepend-icon="lock"
@@ -78,7 +78,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="otpsent" @click="login">Change Password</v-btn>
+                <v-btn color="primary" v-if="otpsent" @click="changePwd()">Change Password</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
