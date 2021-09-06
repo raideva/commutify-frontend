@@ -101,7 +101,7 @@ export default {
       this.$parent.renderChat(user,isFriend);
     },
     logout(){
-      this.setToken(null,null);
+      this.setToken({token:null,username:null});
       this.$router.push('login/');
     }
   },

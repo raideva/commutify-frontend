@@ -2,7 +2,9 @@
   <div class="chats">
     <Navbar :title="currChat.name || currChat.username" class="nav" />
     <div class="rendered-chats">
-      {{ currChat }}
+      <div flat v-for="msg in msgs" :key="msg.id">
+        <Message :message="msg" />
+      </div>
     </div>
     <v-form class="sendMsg">
       <v-text-field
@@ -29,9 +31,13 @@
 <script>
 import Navbar from "./Navbar.vue";
 import axios from "axios";
+import Message from "./Message.vue";
 
 export default {
-  components: { Navbar },
+  components: {
+    Navbar,
+    Message,
+  },
   props: ["currChat", "title"],
   data() {
     return {
@@ -40,6 +46,7 @@ export default {
       marker: true,
       iconIndex: 0,
       index: 1,
+      msgs: [],
       icons: [
         "mdi-emoticon",
         "mdi-emoticon-cool",
@@ -50,6 +57,7 @@ export default {
         "mdi-emoticon-sad",
         "mdi-emoticon-tongue",
       ],
+      chatSocket: null,
     };
   },
   methods: {
@@ -72,20 +80,40 @@ export default {
         : this.iconIndex++;
     },
     getChats() {
-      console.log(this.title);
       axios({
         headers: { Authorization: "Token " + this.$store.state.auth.token },
         url: "api/retrieve_message/",
         method: "post",
         data: {
-          title: "fr-tarun-test",
-          index: 1,
+          title: this.title,
+          index: this.index,
         },
       })
         .then((res) => {
-          console.log(res.data);
+          this.msgs = res.data;
+          this.makeConnection();
         })
         .catch((e) => console.log(e));
+    },
+    makeConnection() {
+      var self = this;
+      this.chatSocket = new WebSocket(
+        `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.username}/`
+      );
+      this.chatSocket.onmessage = function (e){
+        self.msgs.push(e.data);
+        console.log(self.msgs);
+      };
+      console.log(this.msgs);
+      this.$set(
+        this.msgs,
+        this.msgs.length,
+        JSON.parse(JSON.stringify({sender:'tar',text:'lol'}))
+      );
+      console.log(this.msgs);
+      this.chatSocket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly", e);
+      };
     },
   },
 
@@ -95,8 +123,13 @@ export default {
     },
   },
   watch: {
-    currChat: function(){this.getChats()},
+    currChat: function () {
+      this.getChats();
+    },
   },
+  mounted() {
+    this.makeConnection()
+  }
 };
 </script>
 
@@ -111,6 +144,10 @@ export default {
   overflow: scroll;
   width: 100%;
   height: auto;
+
+  margin: 110px 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .sendMsg {

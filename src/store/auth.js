@@ -7,7 +7,7 @@ export default {
   },
 
   mutations: {
-    SET_TOKEN(state,token,username) {
+    SET_TOKEN(state,{token,username}) {
         state.token = token
         state.loggedIn = token===null?false:true
         state.username = username
@@ -15,8 +15,9 @@ export default {
   },
 
   actions: {
-    setToken({commit}, token, username){
-        commit('SET_TOKEN', token, username)
+    setToken({commit}, {token,username}){
+      console.log(token,username,'hi');
+        commit('SET_TOKEN', {token, username})
     },
     getToken(){
       

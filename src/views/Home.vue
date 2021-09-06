@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       chatopen: false,
-      currChat: null,
+      currChat: {},
       isFriend: null,
     };
   },
@@ -33,8 +33,10 @@ export default {
     getTitle(){
       if(this.isFriend===null)return ''
       if(this.isFriend){
-        // console.log(this.);
-        return 'fr-'
+        let user1 = this.$store.state.auth.username
+        let user2 = this.currChat.username
+        if(user1>user2)[user1,user2] = [user2,user1]
+        return `fr-${user1}-${user2}`
       }
       return 'gr-' + this.currChat.name
     }

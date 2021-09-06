@@ -70,7 +70,7 @@ export default {
       this.axios
         .post("auth/login/", data)
         .then((res) => {
-          this.setToken(res.data.token,this.username);
+          this.setToken({token: res.data.token,username: this.username});
           this.$router.push('/')
         })
         .catch((err) => {
