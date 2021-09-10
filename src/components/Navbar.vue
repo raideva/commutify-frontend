@@ -1,7 +1,8 @@
 <template>
   <nav>
     <v-app-bar dark color="blue-grey darken-1" class="hidden-xs-and-down">
-      <v-toolbar-title>Commutify</v-toolbar-title>
+      <v-btn @click="closeChat()"><v-icon>arrow_back</v-icon></v-btn>
+      <v-toolbar-title>{{title}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -58,14 +59,21 @@
 
 <script>
 export default {
+  props: ['title'],
   data() {
     return {
       dialog:false,
       nav: []
     };
   },
+  methods: {
+    closeChat(){
+      this.$parent.$parent.chatopen = false;
+    },
+  }
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

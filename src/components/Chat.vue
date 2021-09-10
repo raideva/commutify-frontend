@@ -1,24 +1,156 @@
 <template>
-  <v-main>
-    <div class="d-flex flex-no-wrap">
-      <v-avatar class="ma-3" size="20" tile>
-        <v-icon> mdi-account-circle </v-icon>
-      </v-avatar>
-      <div>
-        <v-card-text
-          v-text="user.name==undefined?(user.first_name + ' ' + user.last_name):user.name"
-        ></v-card-text>
+  <div class="chats">
+    <Navbar :title="currChat.name || currChat.username" class="nav" />
+    <div class="rendered-chats">
+      <div flat v-for="msg in msgs" :key="msg.id">
+        <Message :message="msg" />
       </div>
     </div>
-  </v-main>
+    <v-form class="sendMsg">
+      <v-text-field
+        hide-details
+        mb-1
+        v-model="message"
+        :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
+        :append-outer-icon="message ? 'mdi-send' : 'mdi-microphone'"
+        :prepend-icon="icon"
+        filled
+        clear-icon="mdi-close-circle"
+        clearable
+        label="Message"
+        type="text"
+        @click:append="toggleMarker"
+        @click:append-outer="sendMessage"
+        @click:prepend="changeIcon"
+        @click:clear="clearMessage"
+      ></v-text-field>
+    </v-form>
+  </div>
 </template>
 
 <script>
+import Navbar from "./Navbar.vue";
+import axios from "axios";
+import Message from "./Message.vue";
+
 export default {
-  name: "Chat",
-  props: ["user"],
+  components: {
+    Navbar,
+    Message,
+  },
+  props: ["currChat", "title"],
+  data() {
+    return {
+      show: false,
+      message: "Hey!",
+      marker: true,
+      iconIndex: 0,
+      index: 1,
+      msgs: [],
+      icons: [
+        "mdi-emoticon",
+        "mdi-emoticon-cool",
+        "mdi-emoticon-dead",
+        "mdi-emoticon-excited",
+        "mdi-emoticon-happy",
+        "mdi-emoticon-neutral",
+        "mdi-emoticon-sad",
+        "mdi-emoticon-tongue",
+      ],
+      chatSocket: null,
+    };
+  },
+  methods: {
+    toggleMarker() {
+      this.marker = !this.marker;
+    },
+    sendMessage() {
+      this.resetIcon();
+      this.clearMessage();
+    },
+    clearMessage() {
+      this.message = "";
+    },
+    resetIcon() {
+      this.iconIndex = 0;
+    },
+    changeIcon() {
+      this.iconIndex === this.icons.length - 1
+        ? (this.iconIndex = 0)
+        : this.iconIndex++;
+    },
+    getChats() {
+      axios({
+        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        url: "api/retrieve_message/",
+        method: "post",
+        data: {
+          title: this.title,
+          index: this.index,
+        },
+      })
+        .then((res) => {
+          this.msgs = res.data;
+          this.makeConnection();
+        })
+        .catch((e) => console.log(e));
+    },
+    makeConnection() {
+      var self = this;
+      this.chatSocket = new WebSocket(
+        `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.username}/`
+      );
+      this.chatSocket.onmessage = function (e){
+        self.msgs.push(e.data);
+        console.log(self.msgs);
+      };
+      console.log(this.msgs);
+      this.$set(
+        this.msgs,
+        this.msgs.length,
+        JSON.parse(JSON.stringify({sender:'tar',text:'lol'}))
+      );
+      console.log(this.msgs);
+      this.chatSocket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly", e);
+      };
+    },
+  },
+
+  computed: {
+    icon() {
+      return this.icons[this.iconIndex];
+    },
+  },
+  watch: {
+    currChat: function () {
+      this.getChats();
+    },
+  },
+  mounted() {
+    this.makeConnection()
+  }
 };
 </script>
 
 <style>
+.chats {
+  overflow: scroll;
+  width: 100%;
+  height: 100vh;
+}
+
+.rendered-chats {
+  overflow: scroll;
+  width: 100%;
+  height: auto;
+
+  margin: 110px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sendMsg {
+  background-color: white;
+}
 </style>
