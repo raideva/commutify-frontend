@@ -22,6 +22,7 @@ export default {
       chatopen: false,
       currChat: {},
       isFriend: null,
+      sendChatSocket: null,
     };
   },
   methods: {
@@ -39,6 +40,14 @@ export default {
         return `fr-${user1}-${user2}`
       }
       return 'gr-' + this.currChat.name
+    },
+    setupChats(){
+      this.sendChatSocket = new WebSocket(
+        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
+      );
+      this.sendChatSocket.onclose = onclose = function (e) {
+        console.error("Chat socket closed unexpectedly", e);
+      };
     }
   }
 };

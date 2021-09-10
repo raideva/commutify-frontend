@@ -66,6 +66,17 @@ export default {
     },
     sendMessage() {
       this.resetIcon();
+      this.chatSocket.send(
+        JSON.stringify({
+          message: this.message,
+        })
+      );
+      this.sendChatSocket.send(
+        JSON.stringify({
+          message: this.message,
+          room: this.title,
+        })
+      );
       this.clearMessage();
     },
     clearMessage() {
@@ -98,19 +109,12 @@ export default {
     makeConnection() {
       var self = this;
       this.chatSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.username}/`
+        `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.token}/`
       );
-      this.chatSocket.onmessage = function (e){
-        self.msgs.push(e.data);
-        console.log(self.msgs);
+      this.chatSocket.onmessage = function (e) {
+        self.msgs.push(JSON.parse(e.data));
+        console.log(self.msgs.length);
       };
-      console.log(this.msgs);
-      this.$set(
-        this.msgs,
-        this.msgs.length,
-        JSON.parse(JSON.stringify({sender:'tar',text:'lol'}))
-      );
-      console.log(this.msgs);
       this.chatSocket.onclose = function (e) {
         console.error("Chat socket closed unexpectedly", e);
       };
@@ -127,9 +131,6 @@ export default {
       this.getChats();
     },
   },
-  mounted() {
-    this.makeConnection()
-  }
 };
 </script>
 
