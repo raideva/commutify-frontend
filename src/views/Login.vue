@@ -34,6 +34,9 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="login">Login</v-btn>
               </v-card-actions>
+              <v-alert
+                  id="try"
+              >{{error_message}}</v-alert>
             </v-card>
           </v-flex>
         </v-layout>
@@ -53,6 +56,7 @@ export default {
     return {
       username: "",
       password: "",
+      error_message: "",
       rules: [ value => !!value || 'Required.' ],
     };
   },
@@ -75,8 +79,10 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          if (err.response.status === 401) console.log("Not Verified");
-          else console.log("Invalid Credentials");
+          if (err.response.status === 401){this.error_message = "*Please verify your email.";
+          this.password = "";}
+          else {this.error_message = "*Invalid Credentials";
+          this.password = "";}
         });
     },
   },
@@ -84,4 +90,9 @@ export default {
 </script>
 
 <style>
+#try{
+  color: rgb(255, 0, 0);
+  /* display: none; */
+
+}
 </style>

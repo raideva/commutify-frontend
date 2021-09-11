@@ -1,77 +1,4 @@
 <template>
-  <!-- <div>
-    <label for="username">
-      <input
-        id="username"
-        v-model="username"
-        type="text"
-        name="username"
-        placeholder="Username"
-        required
-      />
-    </label>
-    <label for="first_name">
-      <input
-        id="first_name"
-        v-model="first_name"
-        type="text"
-        name="first_name"
-        placeholder="First Name"
-        required
-      />
-    </label>
-    <label for="last_name">
-      <input
-        id="last_name"
-        v-model="last_name"
-        type="text"
-        name="last_name"
-        placeholder="Last Name"
-        required
-      />
-    </label>
-    <label for="email">
-      <input
-        id="email"
-        v-model="email"
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-      />
-    </label>
-    <label for="dob">
-      <input
-        id="dob"
-        v-model="dob"
-        type="date"
-        name="dob"
-        placeholder="dd-mm-yyyy"
-        required
-      />
-    </label>
-    <label for="password">
-      <input
-        id="password"
-        v-model="password"
-        type="password"
-        name="password"
-        placeholder="Password"
-        required
-      />
-    </label>
-    <label for="password1">
-      <input
-        id="password1"
-        v-model="password1"
-        type="password"
-        name="password1"
-        placeholder="Repeat Password"
-        required
-      />
-    </label>
-    <button type="submit" @click="register">Register</button>
-  </div> -->
   <div>
     <Navbar />
     <v-main>
@@ -148,6 +75,9 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="register">Login</v-btn>
               </v-card-actions>
+              <v-alert
+                  id="try"
+              >{{error_message}}</v-alert>
             </v-card>
           </v-flex>
         </v-layout>
@@ -173,6 +103,7 @@ export default {
       dob: "",
       password: "",
       password1: "",
+      error_message: "",
       rules: [(value) => !!value || "Required."],
     };
   },
@@ -193,8 +124,23 @@ export default {
       };
       this.axios
         .post("auth/register/", data)
-        .then(() => {console.log("Verify Email Now");this.$router.push('login/');})
-        .catch((err) => console.log(err.response.data));
+        .then(() => {
+        this.$fire({
+          title: "Registration Successfull",
+          text: "You are now registered. Please verify your email.",
+          type: "success",
+          timer: 10000
+        });
+        this.$router.push('../login/');}
+        )
+        .catch((err) => {console.log(err.response.data);
+        var st = "*";
+        if(typeof err.response.data["username"] != "undefined")
+        st += err.response.data["username"][0];
+        else
+        st += err.response.data[0];
+        this.error_message = st;
+        });
     },
   },
 };
@@ -204,5 +150,10 @@ export default {
 .autofill-fix .v-text-field--outlined .v-input--dense .v-label {
   left: -28px!important;
   transform: translateY(-16px) scale(.75);
+}
+#try{
+  color: rgb(255, 0, 0);
+  /* display: none; */
+
 }
 </style>
