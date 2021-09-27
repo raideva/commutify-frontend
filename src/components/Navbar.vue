@@ -4,6 +4,14 @@
       <v-btn @click="closeChat()"><v-icon>arrow_back</v-icon></v-btn>
       <v-toolbar-title>{{title}}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-checkbox
+      class="theme"
+        v-model="$vuetify.theme.dark"
+        inset
+        off-icon="mdi-theme-light-dark"
+        on-icon="mdi-theme-light-dark"
+      ></v-checkbox>
+      
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -17,42 +25,6 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-app-bar>
-
-    <v-app-bar dark color="blue-grey darken-3" class="hidden-sm-and-up">
-      <v-app-bar-title>Mobile Menu</v-app-bar-title>
-      <v-spacer></v-spacer>
-
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        hide-overlay
-        transition="dialog-bottom-transition"
-      >
-        <!-- <v-app-bar-side-icon dark slot="activator"></v-app-bar-side-icon> -->
-        <v-card>
-          <v-app-bar flat color="blue-grey darken-2">
-            <v-app-bar-title>Mobile Menu</v-app-bar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click.native="dialog = false">
-              <v-icon>close</v-icon>
-            </v-btn>
-          </v-app-bar>
-
-          <v-list>
-            <v-list-tile v-for="(item, index) in nav" :key="index" to="#">
-              <v-list-tile-action>
-                <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title :title="item.title">{{
-                  item.text
-                }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-card>
-      </v-dialog>
     </v-app-bar>
   </nav>
 </template>
@@ -75,5 +47,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .theme{
+    margin-top: 20px;
+    margin-right: 20px;
+  }
 </style>

@@ -1,11 +1,6 @@
 <template>
   <div>
-    <Navbar />
-    <v-main>
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs6 sm5 md4>
-            <v-card class="elevation-12">
+            <v-card class="elevation-15" fluid fill-width>
               <v-app-bar dark color="primary">
                 <v-app-bar-title>Login form</v-app-bar-title>
               </v-app-bar>
@@ -18,6 +13,7 @@
                     :rules="rules"
                     label="Username"
                     type="text"
+                    :error-messages="error_username"
                   ></v-text-field>
                   <v-text-field
                     id="password"
@@ -26,37 +22,36 @@
                     v-model="password"
                     :rules="rules"
                     label="Password"
-                    type="password"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show ? 'text' : 'password'"
+                    @click:append="show = !show"
+                    counter
+                    :error-messages="error_password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="login">Login</v-btn>
+                <v-btn color="primary" @click="login" elevation="8">Login</v-btn>
               </v-card-actions>
-              <v-alert
-                  id="try"
-              >{{error_message}}</v-alert>
             </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-main>
+
+
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import Navbar from "../components/Navbar.vue";
 
 export default {
   name: "Login",
-  components: { Navbar },
   data() {
     return {
       username: "",
       password: "",
-      error_message: "",
+      show: "",
+      error_username: "",
+      error_password: "",
       rules: [ value => !!value || 'Required.' ],
     };
   },
@@ -66,7 +61,15 @@ export default {
     }),
 
     login() {
-      if (this.username === "" || this.password === "") return;
+      if (this.username === ""){
+        this.error_username = "This field is required";
+      return;}
+      else this.error_username = "";
+      if(this.password === ""){
+        this.error_password = "This field is required";
+        return;
+      }
+      else this.error_password = "";
       const data = {
         username: this.username,
         password: this.password,
@@ -79,17 +82,27 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          if (err.response.status === 401){this.error_message = "*Please verify your email.";
-          this.password = "";}
-          else {this.error_message = "*Invalid Credentials";
-          this.password = "";}
+          if (err.response.status === 401){
+          this.password = "";
+          this.$fire({
+          title: "Verify your Email",
+          text: "Your email id is not verified, check the link in your inbox.",
+          type: "warning",
+          timer: 100000
+        });
+          }
+          else {
+            this.error_username = "Invalid Credentials";
+          this.password = "";
+          setTimeout(() => {
+          this.error_username = "";}, 5000);}
         });
     },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 #try{
   color: rgb(255, 0, 0);
   /* display: none; */

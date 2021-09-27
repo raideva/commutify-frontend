@@ -102,7 +102,7 @@ export default {
     },
     logout(){
       this.setToken({token:null,username:null});
-      this.$router.push('login/');
+      this.$router.push('main/');
     }
   },
   created() {

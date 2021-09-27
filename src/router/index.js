@@ -6,16 +6,37 @@ import Register from '../views/Register.vue'
 import VerifyUser from '../views/VerifyUser.vue'
 import ResetPwd from '../views/ResetPwd.vue'
 import store from '../store/index'
+import Main from '../views/Main.vue'
+import Requests from '../views/Requests.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+
+  {
+    path: '/main',
+    name: 'Main',
+    component: Main,
+    beforeEnter: (to, from, next) => {
+      if(store.state.auth.token!=null)return next({name: 'Home'})
+      next()
+    }
+  },
+  {
+    path: '/requests',
+    name: 'Requests',
+    component: Requests,
+    beforeEnter: (to, from, next) => {
+      if(store.state.auth.token==null)return next({name: 'Main'})
+      next()
+    }
+  },
   {
     path: '',
     name: 'Home',
     component: Home,
     beforeEnter: (to, from, next) => {
-      if(store.state.auth.token==null)return next({name: 'Login'})
+      if(store.state.auth.token==null)return next({name: 'Main'})
       next()
     }
 

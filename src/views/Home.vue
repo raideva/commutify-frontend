@@ -53,7 +53,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .sendMsg {
   position: fixed;
   bottom: 0;
