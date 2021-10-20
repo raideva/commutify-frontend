@@ -1,11 +1,11 @@
 <template>
   <div class="grey lighten-5">
     <v-layout>
-      <v-flex md3 sm5 xs12 class="sidebar">
+      <v-flex md3 sm5 v-show="!isMobile || !chatopen" class="sidebar">
         <Sidebar />
       </v-flex>
-      <v-flex md9 sm7 xs0 v-show="chatopen">
-        <Chat :currChat="currChat" :title="getTitle()"/>
+      <v-flex md9 sm7 v-show="chatopen">
+        <Chat :currChat="currChat" :title="getTitle()" />
       </v-flex>
     </v-layout>
   </div>
@@ -22,7 +22,7 @@ export default {
       chatopen: false,
       currChat: {},
       isFriend: null,
-      sendChatSocket: null,
+      isMobile: false,
     };
   },
   methods: {
@@ -41,14 +41,14 @@ export default {
       }
       return 'grp-' + this.currChat.id
     },
-    setupChats(){
-      this.sendChatSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
-      );
-      this.sendChatSocket.onclose = onclose = function (e) {
-        console.error("Chat socket closed unexpectedly", e);
-      };
-    }
+    onResize() {
+      this.isMobile = window.innerWidth < 600;
+    },
+  },
+    mounted () {
+      this.onResize()
+      window.addEventListener('resize', this.onResize, { passive: true })
+    
   }
 };
 </script>

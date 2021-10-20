@@ -25,7 +25,6 @@ export default {
     display: flex;
     padding: 20px 10px 0 20px;
     margin: 20px;
-    border-radius: 3000px;
     box-shadow: 0 0 10px rgb(164, 164, 164);
     align-items: center;
   }
@@ -44,7 +43,6 @@ export default {
 .received {
   border: 1px solid lightgray;
   background-color: #fafafa;
-  border-top-left-radius: 1000px;
   float: left;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar dark color="blue-grey darken-1" class="hidden-xs-and-down">
+    <v-app-bar dark color="blue-grey darken-1">
       <v-btn @click="closeChat()"><v-icon>arrow_back</v-icon></v-btn>
       <v-toolbar-title>{{title}}</v-toolbar-title>
       <v-spacer></v-spacer>

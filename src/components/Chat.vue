@@ -1,7 +1,7 @@
 <template>
   <div class="chats">
     <Navbar :title="currChat.name || currChat.username" class="nav" :isfriend="currChat.username" />
-    <div class="rendered-chats">
+    <div class="rendered-chats" ref="chatDiv">
       <div flat v-for="msg in msgs" :key="msg.id">
         <Message :message="msg" />
       </div>
@@ -34,6 +34,7 @@ import axios from "axios";
 import Message from "./Message.vue";
 
 export default {
+  name: 'Chat',
   components: {
     Navbar,
     Message,
@@ -114,7 +115,6 @@ export default {
       );
       this.chatSocket.onmessage = function (e) {
         self.msgs.push(JSON.parse(e.data));
-        console.log(self.msgs.length);
       };
       this.chatSocket.onclose = function (e) {
         console.error("Chat socket closed unexpectedly", e);
@@ -124,7 +124,7 @@ export default {
       this.sendChatSocket = new WebSocket(
         `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
       );
-      this.chatSocket.onclose = function (e) {
+      this.sendchatSocket.onclose = function (e) {
         console.error("SendChat socket closed unexpectedly", e);
       };
 
