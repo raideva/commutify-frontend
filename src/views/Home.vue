@@ -39,7 +39,7 @@ export default {
         if(user1>user2)[user1,user2] = [user2,user1]
         return `fr-${user1}-${user2}`
       }
-      return 'gr-' + this.currChat.name
+      return 'grp-' + this.currChat.id
     },
     setupChats(){
       this.sendChatSocket = new WebSocket(

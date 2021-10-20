@@ -1,6 +1,6 @@
 <template>
   <div class="chats">
-    <Navbar :title="currChat.name || currChat.username" class="nav" />
+    <Navbar :title="currChat.name || currChat.username" class="nav" :isfriend="currChat.username" />
     <div class="rendered-chats">
       <div flat v-for="msg in msgs" :key="msg.id">
         <Message :message="msg" />
@@ -58,6 +58,7 @@ export default {
         "mdi-emoticon-tongue",
       ],
       chatSocket: null,
+      sendChatSocket: null,
     };
   },
   methods: {
@@ -97,7 +98,7 @@ export default {
         method: "post",
         data: {
           title: this.title,
-          index: this.index,
+          index: 0,
         },
       })
         .then((res) => {
@@ -118,6 +119,15 @@ export default {
       this.chatSocket.onclose = function (e) {
         console.error("Chat socket closed unexpectedly", e);
       };
+
+
+      this.sendChatSocket = new WebSocket(
+        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
+      );
+      this.chatSocket.onclose = function (e) {
+        console.error("SendChat socket closed unexpectedly", e);
+      };
+
     },
   },
 

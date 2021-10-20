@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
 import VerifyUser from '../views/VerifyUser.vue'
 import ResetPwd from '../views/ResetPwd.vue'
 import store from '../store/index'
@@ -40,24 +38,6 @@ const routes = [
       next()
     }
 
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    beforeEnter: (to, from, next) => {
-      if(store.state.auth.token!=null)return next({name: 'Home'})
-      next()
-    }
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
-    beforeEnter: (to, from, next) => {
-      if(store.state.auth.token!=null)return next({name: 'Home'})
-      next()
-    }
   },
   {
     path: '/verify/:email/:pin',

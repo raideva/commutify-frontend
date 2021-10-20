@@ -20,8 +20,8 @@
         </template>
 
         <v-list>
-          <v-list-item v-for="n in 5" :key="n" @click="() => {}">
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
+          <v-list-item v-if="isfriend" @click="removefriend(isfriend)">
+            <v-list-item-title>Remove Friend</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -30,8 +30,9 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  props: ['title'],
+  props: ['title', 'isfriend'],
   data() {
     return {
       dialog:false,
@@ -42,6 +43,21 @@ export default {
     closeChat(){
       this.$parent.$parent.chatopen = false;
     },
+    removefriend(username){
+      axios({
+            headers: { Authorization: "Token " + this.$store.state.auth.token },
+            url: "api/fr_remove/",
+            method: "post",
+            data: {
+            username: username,
+            },
+          })
+          .then((res) => {
+          console.log(res);
+          this.$router.go();
+          })
+          .catch((e) => console.log(e));
+    }
   }
 };
 </script>

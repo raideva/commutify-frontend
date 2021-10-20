@@ -44,12 +44,32 @@
       <v-tabs-items v-model="tab">
         <v-tab-item key="Friends">
           <div flat v-for="friend in friends" :key="friend.id" @click="displayChats(friend,1)">
-            <ChatListItem :user="friend"/>
+            <div class="d-flex flex-no-wrap">
+              <v-avatar class="ma-3" size="20" tile>
+              <v-icon> mdi-account-circle </v-icon>
+              </v-avatar>
+            <div>
+            <v-card-text
+              v-text="friend.name==undefined?(friend.first_name + ' ' + friend.last_name):friend.name"
+            ></v-card-text>
+            <v-chip v-text="friend.unseen" v-show="friend.unseen > 0"></v-chip>
+          </div>
+            </div>
           </div>
         </v-tab-item>
         <v-tab-item key="Groups">
           <div flat v-for="group in groups" :key="group.id"  @click="displayChats(group,0)">
-            <ChatListItem :user="group"/>
+            <div class="d-flex flex-no-wrap">
+              <v-avatar class="ma-3" size="20" tile>
+              <v-icon> mdi-account-circle </v-icon>
+              </v-avatar>
+            <div>
+            <v-card-text
+              v-text="group.name"
+            ></v-card-text>
+            <v-chip v-text="group.unseen" v-show="group.unseen > 0"></v-chip>
+          </div>
+            </div>
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -60,19 +80,16 @@
 
 <script>
 import axios from "axios";
-import ChatListItem from "./ChatListItem.vue";
 import { mapActions } from "vuex";
 
 export default {
-  components: {
-    ChatListItem,
-  },
   data() {
     return {
       tab: null,
       items: ["Friends", "Groups"],
       friends: [],
       groups: [],
+      chatSocket: null,
     };
   },
   methods: {
@@ -99,15 +116,58 @@ export default {
     },
     displayChats(user,isFriend){
       this.$parent.renderChat(user,isFriend);
+      for (var i = 0; i < this.friends.length; i++)
+        {
+          if(this.friends[i].room == user["room"]){
+            this.friends[i].unseen = 0;
+          }
+        }
+        for (var j = 0; j < this.groups.length; j++)
+        {
+          if(this.groups[j].room == user["room"]){
+            this.groups[j].unseen = 0;
+          }
+        }
     },
     logout(){
       this.setToken({token:null,username:null});
       this.$router.push('main/');
-    }
+    },
+    makeConnection() {
+      var self = this;
+      this.chatSocket = new WebSocket(
+        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
+      );
+      this.chatSocket.onmessage = function (e) {
+        console.log(e.data);
+        var d = JSON.parse(e.data);
+        if(self.$store.state.auth.username != d["sender"]){
+          for (var i = 0; i < self.friends.length; i++)
+        {
+          if(self.friends[i].room == d["room"]){
+            self.friends[i].unseen++;
+          }
+        }
+        console.log(d["room"]);
+        for (var j = 0; j < self.groups.length; j++)
+        {
+          if(self.groups[j].room == d["room"]){
+            self.groups[j].unseen++;
+            console.log(self.groups[j].room);
+            console.log(self.groups);
+          }
+        }
+        }
+      };
+      this.chatSocket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly", e);
+      };
+    },
   },
   created() {
     this.getFriends();
     this.getGroups();
+    this.makeConnection();
   },
 };
 </script>
