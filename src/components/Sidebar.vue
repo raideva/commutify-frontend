@@ -147,6 +147,9 @@ export default {
         {
           if(self.friends[i].room == d["room"]){
             self.friends[i].unseen++;
+            let frd = self.friends[i];
+            self.friends.splice(i,1);
+            self.friends.unshift(frd);
           }
         }
         console.log(d["room"]);
@@ -154,8 +157,9 @@ export default {
         {
           if(self.groups[j].room == d["room"]){
             self.groups[j].unseen++;
-            console.log(self.groups[j].room);
-            console.log(self.groups);
+            let grp = self.groups[j];
+            self.groups.splice(j,1);
+            self.groups.unshift(grp)
           }
         }
         }
