@@ -43,32 +43,50 @@
     >
       <v-tabs-items v-model="tab">
         <v-tab-item key="Friends">
-          <div flat v-for="friend in friends" :key="friend.id" @click="displayChats(friend,1)">
+          <div
+            flat
+            v-for="friend in friends"
+            :key="friend.id"
+            @click="displayChats(friend, 1)"
+          >
             <div class="d-flex flex-no-wrap">
               <v-avatar class="ma-3" size="20" tile>
-              <v-icon> mdi-account-circle </v-icon>
+                <v-icon> mdi-account-circle </v-icon>
               </v-avatar>
-            <div>
-            <v-card-text
-              v-text="friend.name==undefined?(friend.first_name + ' ' + friend.last_name):friend.name"
-            ></v-card-text>
-            <v-chip v-text="friend.unseen" v-show="friend.unseen > 0"></v-chip>
-          </div>
+              <div>
+                <v-card-text
+                  v-text="
+                    friend.name == undefined
+                      ? friend.first_name + ' ' + friend.last_name
+                      : friend.name
+                  "
+                ></v-card-text>
+                <v-chip
+                  v-text="friend.unseen"
+                  v-show="friend.unseen > 0"
+                ></v-chip>
+              </div>
             </div>
           </div>
         </v-tab-item>
         <v-tab-item key="Groups">
-          <div flat v-for="group in groups" :key="group.id"  @click="displayChats(group,0)">
+          <div
+            flat
+            v-for="group in groups"
+            :key="group.id"
+            @click="displayChats(group, 0)"
+          >
             <div class="d-flex flex-no-wrap">
               <v-avatar class="ma-3" size="20" tile>
-              <v-icon> mdi-account-circle </v-icon>
+                <v-icon> mdi-account-circle </v-icon>
               </v-avatar>
-            <div>
-            <v-card-text
-              v-text="group.name"
-            ></v-card-text>
-            <v-chip v-text="group.unseen" v-show="group.unseen > 0"></v-chip>
-          </div>
+              <div>
+                <v-card-text v-text="group.name"></v-card-text>
+                <v-chip
+                  v-text="group.unseen"
+                  v-show="group.unseen > 0"
+                ></v-chip>
+              </div>
             </div>
           </div>
         </v-tab-item>
@@ -83,7 +101,7 @@ import axios from "axios";
 import { mapActions } from "vuex";
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   data() {
     return {
       tab: null,
@@ -113,26 +131,27 @@ export default {
         headers: { Authorization: "Token " + this.$store.state.auth.token },
         url: "api/groups/",
         method: "get",
-      }).then((res) => {(this.groups = res.data);console.log(this.groups);});
+      }).then((res) => {
+        this.groups = res.data;
+        console.log(this.groups);
+      });
     },
-    displayChats(user,isFriend){
-      this.$parent.renderChat(user,isFriend);
-      for (var i = 0; i < this.friends.length; i++)
-        {
-          if(this.friends[i].room == user["room"]){
-            this.friends[i].unseen = 0;
-          }
+    displayChats(user, isFriend) {
+      this.$parent.renderChat(user, isFriend);
+      for (var i = 0; i < this.friends.length; i++) {
+        if (this.friends[i].room == user["room"]) {
+          this.friends[i].unseen = 0;
         }
-        for (var j = 0; j < this.groups.length; j++)
-        {
-          if(this.groups[j].room == user["room"]){
-            this.groups[j].unseen = 0;
-          }
+      }
+      for (var j = 0; j < this.groups.length; j++) {
+        if (this.groups[j].room == user["room"]) {
+          this.groups[j].unseen = 0;
         }
+      }
     },
-    logout(){
-      this.setToken({token:null,username:null});
-      this.$router.push('main/');
+    logout() {
+      this.setToken({ token: null, username: null });
+      this.$router.push("main/");
     },
     makeConnection() {
       var self = this;
@@ -142,26 +161,24 @@ export default {
       this.chatSocket.onmessage = function (e) {
         console.log(e.data);
         var d = JSON.parse(e.data);
-        if(self.$store.state.auth.username != d["sender"]){
-          for (var i = 0; i < self.friends.length; i++)
-        {
-          if(self.friends[i].room == d["room"]){
-            self.friends[i].unseen++;
-            let frd = self.friends[i];
-            self.friends.splice(i,1);
-            self.friends.unshift(frd);
+        if (self.$store.state.auth.username != d["sender"]) {
+          for (var i = 0; i < self.friends.length; i++) {
+            if (self.friends[i].room == d["room"]) {
+              self.friends[i].unseen++;
+              let frd = self.friends[i];
+              self.friends.splice(i, 1);
+              self.friends.unshift(frd);
+            }
           }
-        }
-        console.log(d["room"]);
-        for (var j = 0; j < self.groups.length; j++)
-        {
-          if(self.groups[j].room == d["room"]){
-            self.groups[j].unseen++;
-            let grp = self.groups[j];
-            self.groups.splice(j,1);
-            self.groups.unshift(grp)
+          console.log(d["room"]);
+          for (var j = 0; j < self.groups.length; j++) {
+            if (self.groups[j].room == d["room"]) {
+              self.groups[j].unseen++;
+              let grp = self.groups[j];
+              self.groups.splice(j, 1);
+              self.groups.unshift(grp);
+            }
           }
-        }
         }
       };
       this.chatSocket.onclose = function (e) {

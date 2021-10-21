@@ -26,30 +26,34 @@ export default {
     };
   },
   methods: {
-    renderChat(user,isFriend){
-      this.chatopen=true;
-      this.currChat=user;
-      this.isFriend=isFriend;
+    renderChat(user, isFriend) {
+      this.chatopen = true;
+      this.currChat = user;
+      this.isFriend = isFriend;
     },
-    getTitle(){
-      if(this.isFriend===null)return ''
-      if(this.isFriend){
-        let user1 = this.$store.state.auth.username
-        let user2 = this.currChat.username
-        if(user1>user2)[user1,user2] = [user2,user1]
-        return `fr-${user1}-${user2}`
+    getTitle() {
+      if (this.isFriend === null) return "";
+      if (this.isFriend) {
+        let user1 = this.$store.state.auth.username;
+        let user2 = this.currChat.username;
+        if (user1 > user2) [user1, user2] = [user2, user1];
+        return `fr-${user1}-${user2}`;
       }
-      return 'grp-' + this.currChat.id
+      return "grp-" + this.currChat.id;
     },
     onResize() {
       this.isMobile = window.innerWidth < 600;
     },
   },
-    mounted () {
-      this.onResize()
-      window.addEventListener('resize', this.onResize, { passive: true })
-    
-  }
+  mounted() {
+    this.onResize();
+    window.addEventListener("resize", this.onResize, { passive: true });
+    // window.scroll(function () {
+    //   if (window.scrollTop() + window.height() == document.height()) {
+    //     alert("bottom!");
+    //   }
+    // });
+  },
 };
 </script>
 
