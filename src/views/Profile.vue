@@ -3,6 +3,8 @@
     username: {{ userDetails.username }} <br />
     status: {{ userDetails.status }} <br />
     frcount: {{ userDetails.frcount }} <br />
+    fname: {{ userDetails.fname }} <br />
+    lname: {{ userDetails.lname }} <br />
     <button v-if="username === $store.state.auth.username">Edit Profile</button>
     <button v-if="username !== $store.state.auth.username">Add Friend</button>
   </div>
