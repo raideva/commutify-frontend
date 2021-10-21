@@ -124,7 +124,7 @@ export default {
       this.sendChatSocket = new WebSocket(
         `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
       );
-      this.sendchatSocket.onclose = function (e) {
+      this.sendChatSocket.onclose = function (e) {
         console.error("SendChat socket closed unexpectedly", e);
       };
 
