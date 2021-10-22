@@ -4,6 +4,7 @@
       :title="currChat.name || currChat.username"
       class="nav"
       :isfriend="currChat.username"
+      :data="currChat"
     />
     <div class="rendered-chats" ref="chatDiv">
       <div flat v-for="msg in msgs" :key="msg.id" @scroll="scroll()">

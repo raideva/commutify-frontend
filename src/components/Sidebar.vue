@@ -23,8 +23,52 @@
         </template>
 
         <v-list>
-          <v-list-item @click="logout()">
-            <v-list-item-title>Logout</v-list-item-title>
+          <v-list-item >
+            <v-btn color="primary" @click="logout()" class="logout_btn">Logout</v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-dialog v-model="create_dialog" max-width="800px">
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" v-bind="attrs" v-on="on">
+              New Group
+            </v-btn>
+            </template>
+            <div>
+            <v-card class="elevation-25" fluid fill-width >
+              <v-app-bar dark color="primary">
+                <v-app-bar-title>Create Group</v-app-bar-title>
+              </v-app-bar>
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    name="login"
+                    v-model="grp_name"
+                    :rules="rules"
+                    label="Group Name"
+                    type="text"
+                    :error-messages="error_grp_name"
+                    outlined
+                ></v-text-field>
+                <v-textarea
+                   v-model="grp_description"
+                :rules="rules"
+                   auto-grow
+                   filled
+                   color="deep-purple"
+                   label="Group Description"
+                   type="text"
+                   :error-messages="error_grp_description"
+                   rows="2"
+                ></v-textarea>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="CreateGroup()" elevation="8">Create Group</v-btn>
+              </v-card-actions>
+            </v-card>
+  </div>
+            </v-dialog>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -109,6 +153,12 @@ export default {
       friends: [],
       groups: [],
       chatSocket: null,
+      create_dialog: false,
+      grp_name: "",
+      grp_description: "",
+      error_grp_name: "",
+      error_grp_description: "",
+      rules: [ value => !!value || 'Required.' ],
     };
   },
   methods: {
@@ -185,6 +235,34 @@ export default {
         console.error("Chat socket closed unexpectedly", e);
       };
     },
+
+    CreateGroup() {
+      if (this.grrp_name === ""){
+        this.error_grp_rname = "This field is required";
+      return;}
+      else this.error_grp_name = "";
+      if(this.grp_description === ""){
+        this.error_grp_description = "This field is required";
+        return;
+      }
+      else this.error_grp_description = "";
+
+      axios({
+            headers: { Authorization: "Token " + this.$store.state.auth.token },
+            url: "api/grp_create/",
+            method: "post",
+            data: {
+            name: this.grp_name,
+            description: this.grp_description,
+            },
+          })
+          .then((res) => {
+          this.create_dialog =false;
+          console.log(res);
+          this.$router.go();
+          })
+          .catch((e) => console.log(e));
+    },
   },
   created() {
     this.getFriends();
@@ -199,5 +277,9 @@ export default {
   /* overflow-y: scroll; */
   width: 100%;
   height: 100vh;
+}
+
+.logout_btn{
+  width: 100%;
 }
 </style>
