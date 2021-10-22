@@ -27,9 +27,12 @@ import { mapActions } from "vuex";
 
 export default ({
     components: { Navbar },
-    data: () => ({
-        requests: [],
-    }),
+    data() {
+      return {
+      requests: [],
+      requestSocket: null,
+    };    
+    },
     methods: {
         ...mapActions({
           setToken: "auth/setToken",
@@ -92,9 +95,23 @@ export default ({
           })
           .catch((e) => console.log(e));
         },
+        makeConnection() {
+          var self = this;
+          this.requestSocket = new WebSocket( `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`);
+
+        this.requestSocket.onmessage = function (e) {
+        console.log(e.data);
+        self.requests.push(JSON.parse(e.data));
+        
+      };
+
+          this.requestSocket.onclose = function (e) {console.error("Chat socket closed unexpectedly", e);
+        };
+    },
     },
     created() {
     this.getRequests();
+    this.makeConnection();
     },
 
 })
