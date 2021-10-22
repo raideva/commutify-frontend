@@ -47,12 +47,7 @@ export default {
   },
   mounted() {
     this.onResize();
-    window.addEventListener("resize", this.onResize, { passive: true });
-    // window.scroll(function () {
-    //   if (window.scrollTop() + window.height() == document.height()) {
-    //     alert("bottom!");
-    //   }
-    // });
+    window.addEventListener("resize", this.onResize, { passive: true })
   },
 };
 </script>

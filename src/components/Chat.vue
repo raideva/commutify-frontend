@@ -1,8 +1,12 @@
 <template>
   <div class="chats">
-    <Navbar :title="currChat.name || currChat.username" class="nav" :isfriend="currChat.username" />
+    <Navbar
+      :title="currChat.name || currChat.username"
+      class="nav"
+      :isfriend="currChat.username"
+    />
     <div class="rendered-chats" ref="chatDiv">
-      <div flat v-for="msg in msgs" :key="msg.id">
+      <div flat v-for="msg in msgs" :key="msg.id" @scroll="scroll()">
         <Message :message="msg" />
       </div>
     </div>
@@ -34,7 +38,7 @@ import axios from "axios";
 import Message from "./Message.vue";
 
 export default {
-  name: 'Chat',
+  name: "Chat",
   components: {
     Navbar,
     Message,
@@ -46,7 +50,7 @@ export default {
       message: "Hey!",
       marker: true,
       iconIndex: 0,
-      index: 1,
+      index: 999,
       msgs: [],
       icons: [
         "mdi-emoticon",
@@ -99,11 +103,13 @@ export default {
         method: "post",
         data: {
           title: this.title,
-          index: 0,
+          index: this.index,
         },
       })
         .then((res) => {
-          this.msgs = res.data;
+          this.msgs = res.data.concat(this.msgs);
+          if (res.data.length > 0) this.index = res.data[0].id;
+          else this.index = 0;
           this.makeConnection();
         })
         .catch((e) => console.log(e));
@@ -120,14 +126,20 @@ export default {
         console.error("Chat socket closed unexpectedly", e);
       };
 
-
       this.sendChatSocket = new WebSocket(
         `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
       );
-      this.sendchatSocket.onclose = function (e) {
-        console.error("SendChat socket closed unexpectedly", e);
-      };
-
+      // this.sendchatSocket.onclose = function (e) {
+      //   console.error("SendChat socket closed unexpectedly", e);
+      // };
+    },
+    scroll () {
+      window.onscroll = () => {
+        if (!window.pageYOffset) {
+          console.log('scrolled to top')
+          this.getChats()
+        }
+      }
     },
   },
 
@@ -136,9 +148,13 @@ export default {
       return this.icons[this.iconIndex];
     },
   },
+  mounted() {
+    this.scroll()
+  },
   watch: {
     currChat: function () {
       this.getChats();
+      this.index = 999;
     },
   },
 };
@@ -148,13 +164,13 @@ export default {
 .chats {
   overflow: scroll;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 .rendered-chats {
   overflow: scroll;
   width: 100%;
-  height: auto;
+  /* height: auto; */
 
   margin: 110px 0;
   display: flex;
