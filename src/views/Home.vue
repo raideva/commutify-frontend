@@ -4,6 +4,12 @@
       <v-flex md3 sm5 v-show="!isMobile || !chatopen" class="sidebar">
         <Sidebar />
       </v-flex>
+      <v-container md9 sm7 v-show="!chatopen">
+        <div id="nochatopen">
+          <img id="logo" src="@/assets/Commutify-logos_transparent.png">
+          <p>Click On Any Chat To Connect !</p>
+        </div>
+      </v-container>
       <v-flex md9 sm7 v-show="chatopen">
         <Chat :currChat="currChat" :title="getTitle()" />
       </v-flex>
@@ -72,5 +78,24 @@ export default {
 }
 *::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
+}
+
+#nochatopen{
+  background: url("https://i.guim.co.uk/img/media/3ae369f9334cfa1486513a3a1780ea1bad8ee3a0/0_189_5320_3191/master/5320.jpg?width=1200&quality=85&auto=format&fit=max&s=6e98b988b50db8a8419636267f7ce05a");
+  min-height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#logo {
+  width: 180px;
+  cursor: pointer;
+  margin: 10px;
 }
 </style>
