@@ -4,12 +4,12 @@
       <v-flex md3 sm5 v-show="!isMobile || !chatopen" class="sidebar">
         <Sidebar />
       </v-flex>
-      <v-container md9 sm7 v-show="!chatopen">
-        <div id="nochatopen">
+      <v-flex md9 sm7 v-show="!isMobile && !chatopen">
+        <div id="nochatopen" md9 sm7 v-show="!isMobile && !chatopen">
           <img id="logo" src="@/assets/Commutify-logos_transparent.png">
           <p>Click On Any Chat To Connect !</p>
         </div>
-      </v-container>
+      </v-flex>
       <v-flex md9 sm7 v-show="chatopen">
         <Chat :currChat="currChat" :title="getTitle()" />
       </v-flex>
@@ -58,7 +58,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+html, body {
+  margin: 0; 
+  height: 100%; 
+  overflow: hidden;
+}
+
 .sendMsg {
   position: fixed;
   bottom: 0;
@@ -96,6 +103,6 @@ export default {
 #logo {
   width: 180px;
   cursor: pointer;
-  margin: 10px;
+  // margin: 10px;
 }
 </style>

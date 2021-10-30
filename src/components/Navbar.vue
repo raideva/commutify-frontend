@@ -1,17 +1,19 @@
 <template>
   <nav>
-    <v-app-bar dark color="blue-grey darken-1">
-      <v-btn @click="closeChat()"><v-icon>arrow_back</v-icon></v-btn>
-      <v-toolbar-title>{{title}}</v-toolbar-title>
+    <v-app-bar dark color="#141414">
+      <v-btn class="ma-2" text icon color="lighten-2" @click="closeChat()"
+        ><v-icon>arrow_back</v-icon>
+      </v-btn>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-checkbox
-      class="theme"
+        class="theme"
         v-model="$vuetify.theme.dark"
         inset
         off-icon="mdi-theme-light-dark"
         on-icon="mdi-theme-light-dark"
       ></v-checkbox>
-      
+
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -26,7 +28,6 @@
           <v-list-item v-else @click="exitGroup(data.id)">
             <v-list-item-title>Exit Group</v-list-item-title>
           </v-list-item>
-          
         </v-list>
       </v-menu>
     </v-app-bar>
@@ -36,54 +37,54 @@
 <script>
 import axios from "axios";
 export default {
-  props: ['title', 'isfriend', 'data'],
+  props: ["title", "isfriend", "data"],
   data() {
     return {
-      dialog:false,
-      nav: []
+      dialog: false,
+      nav: [],
     };
   },
   methods: {
-    closeChat(){
+    closeChat() {
       this.$parent.$parent.chatopen = false;
     },
-    removefriend(username){
+    removefriend(username) {
       axios({
-            headers: { Authorization: "Token " + this.$store.state.auth.token },
-            url: "api/fr_remove/",
-            method: "post",
-            data: {
-            username: username,
-            },
-          })
-          .then((res) => {
+        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        url: "api/fr_remove/",
+        method: "post",
+        data: {
+          username: username,
+        },
+      })
+        .then((res) => {
           console.log(res);
           this.$router.go();
-          })
-          .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
     },
-    exitGroup(id){
+    exitGroup(id) {
       axios({
-            headers: { Authorization: "Token " + this.$store.state.auth.token },
-            url: "api/grp_exit/",
-            method: "post",
-            data: {
-            id: id,
-            },
-          })
-          .then((res) => {
+        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        url: "api/grp_exit/",
+        method: "post",
+        data: {
+          id: id,
+        },
+      })
+        .then((res) => {
           console.log(res);
           this.$router.go();
-          })
-          .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-  .theme{
-    margin-top: 20px;
-    margin-right: 20px;
-  }
+.theme {
+  margin-top: 20px;
+  margin-right: 20px;
+}
 </style>

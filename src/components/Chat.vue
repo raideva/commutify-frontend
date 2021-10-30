@@ -6,8 +6,8 @@
       :isfriend="currChat.username"
       :data="currChat"
     />
-    <div class="rendered-chats" ref="chatDiv">
-      <div flat v-for="msg in msgs" :key="msg.id" @scroll="scroll()">
+    <div class="renderedChats" ref="chatDiv" @scroll="scroll()">
+      <div flat v-for="msg in msgs" :key="msg.id">
         <Message :message="msg" />
       </div>
     </div>
@@ -135,8 +135,9 @@ export default {
       };
     },
     scroll () {
-      window.onscroll = () => {
-        if (!window.pageYOffset) {
+      const el = document.getElementsByClassName('renderedChats')[0];
+      el.onscroll = () => {
+        if (!el.scrollTop) {
           console.log('scrolled to top')
           this.getChats()
         }
@@ -154,28 +155,24 @@ export default {
   },
   watch: {
     currChat: function () {
-      this.getChats();
       this.index = 999;
+      this.msgs = [];
+      this.getChats();
     },
   },
 };
 </script>
 
 <style>
-.chats {
-  overflow: scroll;
-  width: 100%;
-  /* height: 100vh; */
-}
-
-.rendered-chats {
-  overflow: scroll;
-  width: 100%;
+.renderedChats {
   /* height: auto; */
-
-  margin: 110px 0;
+  height: 100vh;
+  overflow: scroll;
+  margin: 20px 0;
+  margin-bottom: 2000px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 150px;
 }
 
 .sendMsg {
