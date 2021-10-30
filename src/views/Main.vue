@@ -84,17 +84,17 @@
     <br />
     <br />
     <div class="links animated animatedFadeInUp fadeInUp">
-      <v-dialog v-model="login_dialog" max-width="600px">
+      <v-dialog v-model="login_dialog" max-width="600px" transition="dialog-top-transition">
         <template v-slot:activator="{ on, attrs }">
           <button color="primary" v-bind="attrs" v-on="on"> Login </button>
         </template>
-        <Login />
+        <Login @close='Close_log'/>
       </v-dialog>
-      <v-dialog v-model="registration_dialog" max-width="800px">
+      <v-dialog v-model="registration_dialog" max-width="800px" transition="dialog-top-transition">
         <template v-slot:activator="{ on, attrs }">
           <button color="primary" v-bind="attrs" v-on="on"> Register </button>
         </template>
-        <Register />
+        <Register @close='Close_reg'/>
       </v-dialog>
       <!-- <v-dialog v-model="registration_dialog" max-width="800px">
         <template v-slot:activator="{ on, attrs }">
@@ -117,9 +117,17 @@ export default {
     registration_dialog: false,
     login_dialog: false,
   }),
+  methods: {
+    Close_reg() {
+      this.registration_dialog = false;
+    },
+    Close_log() {
+      this.login_dialog = false;
+    }
+  },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 body {
   padding: 0;
   height: 100%;

@@ -23,55 +23,60 @@
         </template>
 
         <v-list>
-          <v-list-item>
-            <v-btn color="primary" @click="logout()" class="logout_btn"
-              >Logout</v-btn
-            >
+          <v-list-item >
+            <v-btn color="primary" @click="logout()" class="logout_btn">Logout</v-btn>
           </v-list-item>
           <v-list-item>
-            <v-dialog v-model="create_dialog" max-width="800px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" v-bind="attrs" v-on="on">
-                  New Group
-                </v-btn>
-              </template>
-              <div>
-                <v-card class="elevation-25" fluid fill-width>
-                  <v-app-bar dark color="primary">
-                    <v-app-bar-title>Create Group</v-app-bar-title>
-                  </v-app-bar>
-                  <v-card-text>
-                    <v-form>
-                      <v-text-field
-                        name="login"
-                        v-model="grp_name"
-                        :rules="rules"
-                        label="Group Name"
-                        type="text"
-                        :error-messages="error_grp_name"
-                        outlined
-                      ></v-text-field>
-                      <v-textarea
-                        v-model="grp_description"
-                        :rules="rules"
-                        auto-grow
-                        filled
-                        color="deep-purple"
-                        label="Group Description"
-                        type="text"
-                        :error-messages="error_grp_description"
-                        rows="2"
-                      ></v-textarea>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="CreateGroup()" elevation="8"
-                      >Create Group</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </div>
+            <v-dialog v-model="create_dialog" max-width="800px" transition="dialog-top-transition">
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" v-bind="attrs" v-on="on">
+              New Group
+            </v-btn>
+            </template>
+            <div>
+            <v-card class="elevation-25" fluid fill-width >
+              <v-app-bar dark color="#141414">
+                <v-app-bar-title>Create Group</v-app-bar-title>
+                <v-spacer></v-spacer>
+                <v-btn
+              dark
+              color="#80002a"
+              @click="Close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+              </v-app-bar>
+              <v-card-text class="form">
+                <v-form>
+                  <v-text-field
+                    name="login"
+                    v-model="grp_name"
+                    :rules="rules"
+                    label="Group Name"
+                    type="text"
+                    :error-messages="error_grp_name"
+                    outlined
+                ></v-text-field>
+                <v-textarea
+                   v-model="grp_description"
+                :rules="rules"
+                   auto-grow
+                   filled
+                   color="deep-purple"
+                   label="Group Description"
+                   type="text"
+                   :error-messages="error_grp_description"
+                   rows="2"
+                ></v-textarea>
+                </v-form>
+              </v-card-text>
+              <v-card-actions class="form">
+                <div class="center">
+                <v-btn color="teal" @click="CreateGroup()" elevation="8" class="btn">Create Group</v-btn>
+                </div>
+              </v-card-actions>
+            </v-card>
+  </div>
             </v-dialog>
           </v-list-item>
         </v-list>
@@ -169,6 +174,10 @@ export default {
     ...mapActions({
       setToken: "auth/setToken",
     }),
+
+    Close() { 
+      this.create_dialog = false;
+    },
     getFriends() {
       console.log(this.$store.state.auth.token);
       axios({
@@ -281,8 +290,22 @@ export default {
   width: 100%;
   height: 100vh;
 }
-
-.logout_btn {
+.logout_btn{
   width: 100%;
+}
+.form{
+  background-color: rgb(233, 237, 243);
+}
+.btn{
+  align-self: center;
+  color: white;
+}
+.center {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 </style>

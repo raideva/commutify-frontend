@@ -1,10 +1,18 @@
 <template>
   <div>
             <v-card class="elevation-15" fluid fill-width>
-              <v-app-bar dark color="primary">
+              <v-app-bar dark color="#141414">
                 <v-app-bar-title>Login form</v-app-bar-title>
+                <v-spacer></v-spacer>
+                <v-btn
+              dark
+              color="#80002a"
+              @click="Close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
               </v-app-bar>
-              <v-card-text>
+              <v-card-text class="form">
                 <v-form>
                   <v-text-field
                     prepend-icon="person"
@@ -30,9 +38,10 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" @click="login" elevation="8">Login</v-btn>
+              <v-card-actions class="form">
+                <div class="center">
+                <v-btn color="teal" @click="login" elevation="8" class="btn">Login</v-btn>
+                </div>
               </v-card-actions>
             </v-card>
 
@@ -59,6 +68,10 @@ export default {
     ...mapActions({
       setToken: "auth/setToken",
     }),
+
+    Close() {
+      this.$emit('close', );
+    },
 
     login() {
       if (this.username === ""){
@@ -103,9 +116,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#try{
-  color: rgb(255, 0, 0);
-  /* display: none; */
-
+.form{
+  background-color: rgb(210, 214, 221);
+}
+.btn{
+  align-self: center;
+  color: white;
+}
+.center {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 </style>

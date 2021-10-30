@@ -10,8 +10,14 @@
           <p>Click On Any Chat To Connect !</p>
         </div>
       </v-flex>
-      <v-flex md9 sm7 v-show="chatopen">
+      <v-flex md9 sm7 v-show="chatopen & !infoPane">
         <Chat :currChat="currChat" :title="getTitle()" />
+      </v-flex>
+      <v-flex md5 sm7 v-show="chatopen & infoPane & !isMobile">
+        <Chat :currChat="currChat" :title="getTitle()" />
+      </v-flex>
+      <v-flex md4 sm5 v-show="infoPane & chatopen">
+        <GroupInformation :id="currGroupId" ref="grpInfo" />
       </v-flex>
     </v-layout>
   </div>
@@ -20,15 +26,18 @@
 <script>
 import Sidebar from "../components/Sidebar.vue";
 import Chat from "../components/Chat.vue";
+import GroupInformation from '../components/GroupInformation.vue';
 
 export default {
-  components: { Sidebar, Chat },
+  components: { Sidebar, Chat, GroupInformation },
   data() {
     return {
       chatopen: false,
       currChat: {},
       isFriend: null,
       isMobile: false,
+      infoPane: false,
+      currGroupId: null,
     };
   },
   methods: {
@@ -50,6 +59,16 @@ export default {
     onResize() {
       this.isMobile = window.innerWidth < 600;
     },
+
+    showGroupInfo(id) {
+      this.currGroupId = id;
+      this.infoPane = true;
+      this.$refs.grpInfo.getDetails(id);
+    },
+  },
+  mounted() {
+    this.onResize();
+    window.addEventListener("resize", this.onResize, { passive: true })
   },
   mounted() {
     this.onResize();
