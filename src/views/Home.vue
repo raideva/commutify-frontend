@@ -70,10 +70,6 @@ export default {
     this.onResize();
     window.addEventListener("resize", this.onResize, { passive: true })
   },
-  mounted() {
-    this.onResize();
-    window.addEventListener("resize", this.onResize, { passive: true })
-  },
 };
 </script>
 

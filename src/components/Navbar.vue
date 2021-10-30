@@ -69,21 +69,6 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    exitGroup(id) {
-      axios({
-        headers: { Authorization: "Token " + this.$store.state.auth.token },
-        url: "api/grp_exit/",
-        method: "post",
-        data: {
-          id: id,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          this.$router.go();
-          })
-          .catch((e) => console.log(e));
-    },
     exitGroup(id){
       axios({
             headers: { Authorization: "Token " + this.$store.state.auth.token },
