@@ -4,8 +4,20 @@
       <v-flex md3 sm5 v-show="!isMobile || !chatopen" class="sidebar">
         <Sidebar />
       </v-flex>
-      <v-flex md9 sm7 v-show="chatopen">
+      <v-container md9 sm7 v-show="!chatopen & !isMobile">
+        <div id="nochatopen">
+          <img id="logo" src="@/assets/Commutify-logos_transparent.png">
+          <p>Click On Any Chat To Connect !</p>
+        </div>
+      </v-container>
+      <v-flex md9 sm7 v-show="chatopen & !infoPane">
         <Chat :currChat="currChat" :title="getTitle()" />
+      </v-flex>
+      <v-flex md5 sm7 v-show="chatopen & infoPane & !isMobile">
+        <Chat :currChat="currChat" :title="getTitle()" />
+      </v-flex>
+      <v-flex md4 sm5 v-show="infoPane & chatopen">
+        <GroupInformation :id="currGroupId" ref="grpInfo" />
       </v-flex>
     </v-layout>
   </div>
@@ -14,42 +26,50 @@
 <script>
 import Sidebar from "../components/Sidebar.vue";
 import Chat from "../components/Chat.vue";
+import GroupInformation from '../components/GroupInformation.vue';
 
 export default {
-  components: { Sidebar, Chat },
+  components: { Sidebar, Chat, GroupInformation },
   data() {
     return {
       chatopen: false,
       currChat: {},
       isFriend: null,
       isMobile: false,
+      infoPane: false,
+      currGroupId: null,
     };
   },
   methods: {
-    renderChat(user,isFriend){
-      this.chatopen=true;
-      this.currChat=user;
-      this.isFriend=isFriend;
+    renderChat(user, isFriend) {
+      this.chatopen = true;
+      this.currChat = user;
+      this.isFriend = isFriend;
     },
-    getTitle(){
-      if(this.isFriend===null)return ''
-      if(this.isFriend){
-        let user1 = this.$store.state.auth.username
-        let user2 = this.currChat.username
-        if(user1>user2)[user1,user2] = [user2,user1]
-        return `fr-${user1}-${user2}`
+    getTitle() {
+      if (this.isFriend === null) return "";
+      if (this.isFriend) {
+        let user1 = this.$store.state.auth.username;
+        let user2 = this.currChat.username;
+        if (user1 > user2) [user1, user2] = [user2, user1];
+        return `fr-${user1}-${user2}`;
       }
-      return 'grp-' + this.currChat.id
+      return "grp-" + this.currChat.id;
     },
     onResize() {
       this.isMobile = window.innerWidth < 600;
     },
+
+    showGroupInfo(id) {
+      this.currGroupId = id;
+      this.infoPane = true;
+      this.$refs.grpInfo.getDetails(id);
+    },
   },
-    mounted () {
-      this.onResize()
-      window.addEventListener('resize', this.onResize, { passive: true })
-    
-  }
+  mounted() {
+    this.onResize();
+    window.addEventListener("resize", this.onResize, { passive: true })
+  },
 };
 </script>
 
@@ -73,5 +93,24 @@ export default {
 }
 *::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
+}
+
+#nochatopen{
+  background: url("https://i.guim.co.uk/img/media/3ae369f9334cfa1486513a3a1780ea1bad8ee3a0/0_189_5320_3191/master/5320.jpg?width=1200&quality=85&auto=format&fit=max&s=6e98b988b50db8a8419636267f7ce05a");
+  min-height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#logo {
+  width: 180px;
+  cursor: pointer;
+  margin: 10px;
 }
 </style>

@@ -1,10 +1,18 @@
 <template>
   <div>
             <v-card class="elevation-12" fluid fill-width>
-              <v-app-bar dark color="primary">
+              <v-app-bar dark color="#141414">
                 <v-toolbar-title>Register</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn
+              dark
+              @click="Close"
+              color="#80002a"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
               </v-app-bar>
-              <v-card-text>
+              <v-card-text class="form">
                 <v-form>
                   <v-text-field
                     prepend-icon="person"
@@ -108,9 +116,10 @@
                 
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" @click="register">Register</v-btn>
+              <v-card-actions class="form">
+                <div class="center">
+                <v-btn color="teal" @click="register" elevation="8" class="btn">Register</v-btn>
+                </div>
               </v-card-actions>
             </v-card>
   </div>
@@ -171,6 +180,9 @@ computed: {
     },
 
   methods: {
+    Close() {
+      this.$emit('close', );
+    },
 
     clear() {
       setTimeout(() => {
@@ -241,9 +253,19 @@ computed: {
   left: -28px!important;
   transform: translateY(-16px) scale(.75);
 }
-#try{
-  color: rgb(255, 0, 0);
-  /* display: none; */
-
+.form{
+  background-color: rgb(210, 214, 221);
+}
+.btn{
+  align-self: center;
+  color: white;
+}
+.center {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 </style>
