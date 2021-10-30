@@ -158,7 +158,6 @@ export default {
       this.index = 999;
       this.msgs = [];
       this.getChats();
-      this.index = 999;
     },
   },
 };

@@ -48,7 +48,7 @@
     <div class="firefly"></div>
     <div class="firefly"></div>
     <div class="firefly"></div>
-    <nav>
+    <nav id="navbar">
       <img src="../assets/Commutify-logos_white.png" alt="" class="logo" />
     </nav>
     <div class="lightning-container animated animatedFadeInRight fadeInRight">
@@ -150,25 +150,25 @@ body::-webkit-scrollbar {
   color: #fff;
   position: relative;
 }
-nav {
+#navbar {
   display: flex;
   align-items: center;
   padding: 20px 8%;
 }
 
-nav .logo {
+#navbar .logo {
   width: 150px;
   cursor: pointer;
 }
-nav ul {
+#navbar ul {
   flex: 1;
   text-align: right;
 }
-nav ul li {
+#navbar ul li {
   display: inline-block;
   list-style: none;
 }
-nav ul li a {
+#navbar ul li a {
   text-decoration: none;
   color: #fff;
 }
