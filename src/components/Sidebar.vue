@@ -167,7 +167,7 @@ export default {
       grp_description: "",
       error_grp_name: "",
       error_grp_description: "",
-      rules: [ value => !!value || 'Required.' ],
+      rules: [(value) => !!value || "Required."],
     };
   },
   methods: {
@@ -250,31 +250,30 @@ export default {
     },
 
     CreateGroup() {
-      if (this.grrp_name === ""){
+      if (this.grrp_name === "") {
         this.error_grp_rname = "This field is required";
-      return;}
-      else this.error_grp_name = "";
-      if(this.grp_description === ""){
+        return;
+      } else this.error_grp_name = "";
+      if (this.grp_description === "") {
         this.error_grp_description = "This field is required";
         return;
-      }
-      else this.error_grp_description = "";
+      } else this.error_grp_description = "";
 
       axios({
-            headers: { Authorization: "Token " + this.$store.state.auth.token },
-            url: "api/grp_create/",
-            method: "post",
-            data: {
-            name: this.grp_name,
-            description: this.grp_description,
-            },
-          })
-          .then((res) => {
-          this.create_dialog =false;
+        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        url: "api/grp_create/",
+        method: "post",
+        data: {
+          name: this.grp_name,
+          description: this.grp_description,
+        },
+      })
+        .then((res) => {
+          this.create_dialog = false;
           console.log(res);
           this.$router.go();
-          })
-          .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
     },
   },
   created() {
@@ -291,7 +290,6 @@ export default {
   width: 100%;
   height: 100vh;
 }
-
 .logout_btn{
   width: 100%;
 }
