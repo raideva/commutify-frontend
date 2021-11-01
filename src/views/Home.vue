@@ -63,7 +63,6 @@ export default {
     showGroupInfo(id) {
       this.currGroupId = id;
       this.infoPane = true;
-      this.$refs.grpInfo.getDetails(id);
     },
   },
   mounted() {

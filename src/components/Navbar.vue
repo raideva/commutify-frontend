@@ -23,13 +23,19 @@
 
         <v-list>
           <v-list-item v-if="isfriend">
-            <v-list-item-title @click="removefriend(isfriend)">Remove Friend</v-list-item-title>
+            <v-list-item-title @click="removefriend(isfriend)"
+              >Remove Friend</v-list-item-title
+            >
           </v-list-item>
           <v-list-item v-else>
-            <v-list-item-title  @click="exitGroup(data.id)">Exit Group</v-list-item-title>
+            <v-list-item-title @click="exitGroup(data.id)"
+              >Exit Group</v-list-item-title
+            >
           </v-list-item>
           <v-list-item v-if="!isfriend">
-            <v-list-item-title  @click="GroupInformation()">Group Information</v-list-item-title>
+            <v-list-item-title @click="GroupInformation()"
+              >Group Information</v-list-item-title
+            >
           </v-list-item>
         </v-list>
       </v-menu>
@@ -51,8 +57,10 @@ export default {
     GroupInformation() {
       this.$parent.$parent.showGroupInfo(this.data.id);
     },
-    closeChat(){
+    closeChat() {
       this.$parent.$parent.chatopen = false;
+      this.$parent.$parent.infoPane = false;
+      this.$parent.$parent.curGroupId = null;
     },
     removefriend(username) {
       axios({
@@ -69,22 +77,22 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    exitGroup(id){
+    exitGroup(id) {
       axios({
-            headers: { Authorization: "Token " + this.$store.state.auth.token },
-            url: "api/grp_exit/",
-            method: "post",
-            data: {
-            id: id,
-            },
-          })
-          .then((res) => {
+        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        url: "api/grp_exit/",
+        method: "post",
+        data: {
+          id: id,
+        },
+      })
+        .then((res) => {
           console.log(res);
           this.$router.go();
-          })
-          .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
     },
-  }
+  },
 };
 </script>
 

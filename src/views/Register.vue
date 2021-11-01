@@ -221,7 +221,7 @@ computed: {
           type: "success",
           timer: 10000
         });
-        this.$router.push('../login/');}
+        this.$router.push('../');}
         )
         .catch((err) => {console.log(err.response.data);
         if(typeof err.response.data["username"] != "undefined")
