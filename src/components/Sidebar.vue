@@ -201,6 +201,8 @@ export default {
     },
     displayChats(user, isFriend) {
       this.$parent.renderChat(user, isFriend);
+      this.$parent.infoPane = false;
+      this.$parent.curGroupId = null;
       for (var i = 0; i < this.friends.length; i++) {
         if (this.friends[i].room == user["room"]) {
           this.friends[i].unseen = 0;
