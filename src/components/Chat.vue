@@ -12,23 +12,29 @@
       </div>
     </div>
     <v-form class="sendMsg">
-      <v-text-field
-        hide-details
-        mb-1
-        v-model="message"
-        :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
-        :append-outer-icon="message ? 'mdi-send' : 'mdi-microphone'"
-        :prepend-icon="icon"
-        filled
-        clear-icon="mdi-close-circle"
-        clearable
-        label="Message"
-        type="text"
-        @click:append="toggleMarker"
-        @click:append-outer="sendMessage"
-        @click:prepend="changeIcon"
-        @click:clear="clearMessage"
-      ></v-text-field>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-text-field
+              hide-details
+              mb-1
+              v-model.trim="message"
+              :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
+              :append-outer-icon="message ? 'mdi-send' : 'mdi-microphone'"
+              :prepend-icon="icon"
+              filled
+              clear-icon="mdi-close-circle"
+              clearable
+              label="Message"
+              type="text"
+              @click:append="toggleMarker"
+              @click:append-outer="sendMessage"
+              @click:prepend="changeIcon"
+              @click:clear="clearMessage"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-form>
   </div>
 </template>
@@ -134,14 +140,14 @@ export default {
         console.error("SendChat socket closed unexpectedly", e);
       };
     },
-    scroll () {
-      const el = document.getElementsByClassName('renderedChats')[0];
+    scroll() {
+      const el = document.getElementsByClassName("renderedChats")[0];
       el.onscroll = () => {
         if (!el.scrollTop) {
-          console.log('scrolled to top')
-          this.getChats()
+          console.log("scrolled to top");
+          this.getChats();
         }
-      }
+      };
     },
   },
 
@@ -151,7 +157,7 @@ export default {
     },
   },
   mounted() {
-    this.scroll()
+    this.scroll();
   },
   watch: {
     currChat: function () {
@@ -163,7 +169,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .renderedChats {
   /* height: auto; */
   height: 100vh;
@@ -175,7 +181,31 @@ export default {
   padding-bottom: 150px;
 }
 
+.v-input {
+  width:100%;
+  padding: 0;
+  margin: 0;
+}
+
 .sendMsg {
   background-color: white;
+  width: 75%;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .sendMsg{
+    width: 58.3%;
+  }
+}
+@media (max-width: 600px) {
+  .sendMsg{
+    width: 100%;
+  }
+}
+
+.col{
+  padding: 0;
 }
 </style>

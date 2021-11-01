@@ -23,60 +23,68 @@
         </template>
 
         <v-list>
-          <v-list-item >
-            <v-btn color="primary" @click="logout()" class="logout_btn">Logout</v-btn>
+          <v-list-item>
+            <v-btn color="primary" @click="logout()" class="logout_btn"
+              >Logout</v-btn
+            >
           </v-list-item>
           <v-list-item>
-            <v-dialog v-model="create_dialog" max-width="800px" transition="dialog-top-transition">
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" v-bind="attrs" v-on="on">
-              New Group
-            </v-btn>
-            </template>
-            <div>
-            <v-card class="elevation-25" fluid fill-width >
-              <v-app-bar dark color="#141414">
-                <v-app-bar-title>Create Group</v-app-bar-title>
-                <v-spacer></v-spacer>
-                <v-btn
-              dark
-              color="#80002a"
-              @click="Close"
+            <v-dialog
+              v-model="create_dialog"
+              max-width="800px"
+              transition="dialog-top-transition"
             >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-              </v-app-bar>
-              <v-card-text class="form">
-                <v-form>
-                  <v-text-field
-                    name="login"
-                    v-model="grp_name"
-                    :rules="rules"
-                    label="Group Name"
-                    type="text"
-                    :error-messages="error_grp_name"
-                    outlined
-                ></v-text-field>
-                <v-textarea
-                   v-model="grp_description"
-                :rules="rules"
-                   auto-grow
-                   filled
-                   color="deep-purple"
-                   label="Group Description"
-                   type="text"
-                   :error-messages="error_grp_description"
-                   rows="2"
-                ></v-textarea>
-                </v-form>
-              </v-card-text>
-              <v-card-actions class="form">
-                <div class="center">
-                <v-btn color="teal" @click="CreateGroup()" elevation="8" class="btn">Create Group</v-btn>
-                </div>
-              </v-card-actions>
-            </v-card>
-  </div>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="primary" v-bind="attrs" v-on="on">
+                  New Group
+                </v-btn>
+              </template>
+              <div>
+                <v-card class="elevation-25" fluid fill-width>
+                  <v-app-bar dark color="#141414">
+                    <v-app-bar-title>Create Group</v-app-bar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn dark color="#80002a" @click="Close">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-app-bar>
+                  <v-card-text class="form">
+                    <v-form>
+                      <v-text-field
+                        name="login"
+                        v-model="grp_name"
+                        :rules="rules"
+                        label="Group Name"
+                        type="text"
+                        :error-messages="error_grp_name"
+                        outlined
+                      ></v-text-field>
+                      <v-textarea
+                        v-model="grp_description"
+                        :rules="rules"
+                        auto-grow
+                        filled
+                        color="deep-purple"
+                        label="Group Description"
+                        type="text"
+                        :error-messages="error_grp_description"
+                        rows="2"
+                      ></v-textarea>
+                    </v-form>
+                  </v-card-text>
+                  <v-card-actions class="form">
+                    <div class="center">
+                      <v-btn
+                        color="teal"
+                        @click="CreateGroup()"
+                        elevation="8"
+                        class="btn"
+                        >Create Group</v-btn
+                      >
+                    </div>
+                  </v-card-actions>
+                </v-card>
+              </div>
             </v-dialog>
           </v-list-item>
         </v-list>
@@ -98,49 +106,58 @@
         <v-tab-item key="Friends">
           <div
             flat
+            class="listItem"
             v-for="friend in friends"
             :key="friend.id"
             @click="displayChats(friend, 1)"
           >
-            <div class="d-flex flex-no-wrap">
-              <v-avatar class="ma-3" size="20" tile>
-                <v-icon> mdi-account-circle </v-icon>
-              </v-avatar>
-              <div>
-                <v-card-text
-                  v-text="
-                    friend.name == undefined
-                      ? friend.first_name + ' ' + friend.last_name
-                      : friend.name
-                  "
-                ></v-card-text>
-                <v-chip
-                  v-text="friend.unseen"
-                  v-show="friend.unseen > 0"
-                ></v-chip>
-              </div>
-            </div>
+            <v-card class="listItem">
+              <v-list-item class="grow">
+                <v-list-item-avatar>
+                  <v-icon> mdi-account-circle </v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{
+                    `${friend.first_name} ${friend.last_name}` ||
+                    `${friend.name}`
+                  }}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-row align="center" justify="end">
+                  <v-chip
+                    color="green"
+                    v-text="friend.unseen"
+                    v-show="friend.unseen > 0"
+                  ></v-chip>
+                </v-row>
+              </v-list-item>
+            </v-card>
           </div>
         </v-tab-item>
         <v-tab-item key="Groups">
           <div
             flat
+            class="listItem"
             v-for="group in groups"
             :key="group.id"
             @click="displayChats(group, 0)"
           >
-            <div class="d-flex flex-no-wrap">
-              <v-avatar class="ma-3" size="20" tile>
-                <v-icon> mdi-account-circle </v-icon>
-              </v-avatar>
-              <div>
-                <v-card-text v-text="group.name"></v-card-text>
-                <v-chip
-                  v-text="group.unseen"
-                  v-show="group.unseen > 0"
-                ></v-chip>
-              </div>
-            </div>
+            <v-card class="listItem">
+              <v-list-item class="grow">
+                <v-list-item-avatar>
+                  <v-icon> mdi-account-circle </v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{ group.name }}</v-list-item-title>
+                </v-list-item-content>
+
+                <v-row align="center" justify="end">
+                  <v-chip
+                    v-text="group.unseen"
+                    v-show="group.unseen > 0"
+                  ></v-chip>
+                </v-row> </v-list-item
+            ></v-card>
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -175,7 +192,7 @@ export default {
       setToken: "auth/setToken",
     }),
 
-    Close() { 
+    Close() {
       this.create_dialog = false;
     },
     getFriends() {
@@ -290,13 +307,19 @@ export default {
   width: 100%;
   height: 100vh;
 }
-.logout_btn{
+.listItem {
+  border-bottom: 1px solid #7a7164;
+}
+.logout_btn {
   width: 100%;
 }
-.form{
+.nobr {
+  white-space: nowrap;
+}
+.form {
   background-color: rgb(233, 237, 243);
 }
-.btn{
+.btn {
   align-self: center;
   color: white;
 }
