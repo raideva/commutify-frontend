@@ -2,7 +2,7 @@
 <v-card class="mx-auto" outlined color="brown">
     <v-app-bar dark height="40px">
         <v-app-bar-title>Group Users</v-app-bar-title>
-        <v-dialog v-model="addMemberDialog" max-width="800px" transition="dialog-bottom-transition" v-if="you.isAdmin">
+        <v-dialog v-model="addMemberDialog" max-width="800px" transition="dialog-bottom-transition" v-if="you.isAdmin" persistent>
             <template v-slot:activator="{ on, attrs }">
                 <v-row justify="end">
                     <v-btn v-bind="attrs" v-on="on" text color="blue">Invite user +</v-btn>
@@ -19,8 +19,8 @@
                 <v-card-text class="form">
                     <v-form>
                         <v-container style="height: 30px"></v-container>
-                        <v-text-field name="new_username" v-model="new_username" :rules="rules" label="Username" type="text" :error-messages="error_message" outlined ></v-text-field>
-                        </v-form>
+                        <v-text-field name="new_username" v-model="new_username" :rules="rules" label="Username" type="text" :error-messages="error_message" outlined></v-text-field>
+                    </v-form>
                 </v-card-text>
                 <v-card-actions class="form">
                     <div class="center">
@@ -120,11 +120,14 @@ export default {
             new_username: "",
             error_message: "",
             rules: [(value) => !!value || "Required."],
+            requestSocket: null,
         };
     },
     methods: {
         Close() {
             this.addMemberDialog = false;
+            this.new_username = "";
+            this.error_message = "";
         },
 
         getList() {
@@ -214,6 +217,13 @@ export default {
                 })
                 .then((res) => {
                     console.log(res);
+                    this.requestSocket.send(
+                        JSON.stringify({
+                            username: this.new_username,
+                            id: this.id,
+                            type: 1,
+                        })
+                    );
                     this.Close();
                 })
                 .catch((e) => {
@@ -222,10 +232,20 @@ export default {
                     this.error_message = e.response.data["error"];
                 });
         },
+        makeConnection() {
+            this.requestSocket = new WebSocket(
+                `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
+            );
+            this.requestSocket.onclose = function (e) {
+                console.error("Chat socket closed unexpectedly", e);
+            };
+        },
+
     },
     watch: {
         id: function () {
             this.getList();
+            this.makeConnection();
         },
     },
 };
@@ -245,7 +265,6 @@ export default {
     float: right;
     margin-top: 1%;
 }
-
 
 .form {
     background-color: rgb(210, 214, 221);
