@@ -9,8 +9,8 @@
             </v-btn>
         </v-app-bar>
         <v-card-text class="form">
-            <v-form>
-                <v-text-field name="grp_name" v-model="cur_grp_name" :rules="rules" label="Group Name" type="text" :error-messages="error_grp_name" outlined :value="grp_name"></v-text-field>
+            <v-form v-on:submit.prevent>
+                <v-text-field name="grp_name" v-model="cur_grp_name" :rules="rules" label="Group Name" type="text" :error-messages="error_grp_name" outlined :value="grp_name" @keypress.enter="UpdateGroup"></v-text-field>
                 <v-textarea v-model="cur_grp_description" :rules="rules" auto-grow filled color="deep-purple" label="Group Description" type="text" :error-messages="error_grp_description" rows="2" :value="grp_description"></v-textarea>
             </v-form>
         </v-card-text>

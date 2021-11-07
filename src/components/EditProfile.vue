@@ -9,10 +9,10 @@
             </v-btn>
         </v-app-bar>
         <v-card-text class="form">
-            <v-form>
-                <v-text-field name="first_name" v-model="first_name" :rules="rules" label="First Name" type="text" :error-messages="error_first_name" outlined :value="first_name"></v-text-field>
-                <v-text-field name="last_name" v-model="last_name" :rules="rules" label="Last Name" type="text" :error-messages="error_last_name" outlined :value="last_name"></v-text-field>
-                <v-text-field name="status" v-model="status" :rules="rules" label="Status" type="text" :error-messages="error_status" outlined :value="status"></v-text-field>
+            <v-form v-on:submit.prevent>
+                <v-text-field name="first_name" v-model="first_name" :rules="rules" label="First Name" type="text" :error-messages="error_first_name" outlined :value="first_name" v-on:keyup.enter="UpdateProfile"></v-text-field>
+                <v-text-field name="last_name" v-model="last_name" :rules="rules" label="Last Name" type="text" :error-messages="error_last_name" outlined :value="last_name" v-on:keyup.enter="UpdateProfile" ></v-text-field>
+                <v-text-field name="status" v-model="status" :rules="rules" label="Status" type="text" :error-messages="error_status" outlined :value="status" v-on:keyup.enter="UpdateProfile" ></v-text-field>
             </v-form>
         </v-card-text>
         <v-card-actions class="form">
