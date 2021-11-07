@@ -1,7 +1,7 @@
 <template>
   <div class="chats">
     <Navbar
-      :title="currChat.name || currChat.username"
+      :title="currChat.name || `${currChat.first_name} ${currChat.last_name}`"
       class="nav"
       :isfriend="currChat.username"
       :data="currChat"
@@ -11,7 +11,7 @@
         <Message :message="msg" />
       </div>
     </div>
-    <v-form class="sendMsg">
+    <v-form :class="compress?'sendMsg smaller':'sendMsg'">
       <v-container>
         <v-row>
           <v-col>
@@ -50,7 +50,7 @@ export default {
     Navbar,
     Message,
   },
-  props: ["currChat", "title"],
+  props: ["currChat", "title", "newMsg", "compress"],
   data() {
     return {
       show: false,
@@ -79,17 +79,19 @@ export default {
     },
     sendMessage() {
       this.resetIcon();
-      this.chatSocket.send(
-        JSON.stringify({
-          message: this.message,
-        })
-      );
+      // this.chatSocket.send(
+      //   JSON.stringify({
+      //     message: this.message,
+      //   })
+      // );
       this.sendChatSocket.send(
         JSON.stringify({
           message: this.message,
           room: this.title,
         })
       );
+      var objDiv = document.getElementsByClassName("renderedChats")[0];
+      objDiv.scrollTop = objDiv.scrollHeight;
       this.clearMessage();
     },
     clearMessage() {
@@ -122,16 +124,19 @@ export default {
         .catch((e) => console.log(e));
     },
     makeConnection() {
-      var self = this;
-      this.chatSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.token}/`
-      );
-      this.chatSocket.onmessage = function (e) {
-        self.msgs.push(JSON.parse(e.data));
-      };
-      this.chatSocket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly", e);
-      };
+      // var self = this;
+      // this.chatSocket = new WebSocket(
+      //   `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.token}/`
+      // );
+      // this.chatSocket.onmessage = function (e) {
+      //   const d = JSON.parse(e.data);
+      //   console.log(d,'called')
+      //   // self.msgs.push(d);
+      //   console.log(d,'call')
+      // };
+      // this.chatSocket.onclose = function (e) {
+      //   console.error("Chat socket closed unexpectedly", e);
+      // };
 
       this.sendChatSocket = new WebSocket(
         `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
@@ -149,6 +154,9 @@ export default {
         }
       };
     },
+    addMsg() {
+      this.msgs.push(this.newMsg);
+    },
   },
 
   computed: {
@@ -164,6 +172,9 @@ export default {
       this.index = 999;
       this.msgs = [];
       this.getChats();
+    },
+    newMsg: function () {
+      this.addMsg();
     },
   },
 };
@@ -182,7 +193,7 @@ export default {
 }
 
 .v-input {
-  width:100%;
+  width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -195,17 +206,21 @@ export default {
 }
 
 @media (max-width: 900px) {
-  .sendMsg{
+  .sendMsg {
     width: 58.3%;
   }
 }
 @media (max-width: 600px) {
-  .sendMsg{
+  .sendMsg {
     width: 100%;
   }
 }
 
-.col{
+.smaller{
+  width: 40%;
+}
+
+.col {
   padding: 0;
 }
 </style>

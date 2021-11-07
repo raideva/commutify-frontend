@@ -2,7 +2,7 @@
   <div class="grey lighten-5">
     <v-layout>
       <v-flex md3 sm5 v-show="!isMobile || !chatopen" class="sidebar">
-        <Sidebar />
+        <Sidebar @msg="updateMsg" />
       </v-flex>
       <v-flex md9 sm7 v-show="!isMobile && !chatopen">
         <div id="nochatopen" md9 sm7 v-show="!isMobile && !chatopen">
@@ -11,10 +11,10 @@
         </div>
       </v-flex>
       <v-flex md9 sm7 v-show="chatopen & !infoPane">
-        <Chat :currChat="currChat" :title="getTitle()" />
+        <Chat :currChat="currChat" :title="getTitle()" :compress="false" :newMsg="newMsg" />
       </v-flex>
       <v-flex md5 sm7 v-show="chatopen & infoPane & !isMobile">
-        <Chat :currChat="currChat" :title="getTitle()" />
+        <Chat :currChat="currChat" :title="getTitle()" :compress="(chatopen & infoPane & !isMobile) & (chatopen & infoPane & !isMobile)" :newMsg="newMsg" />
       </v-flex>
       <v-flex md4 sm5 v-show="infoPane & chatopen">
         <GroupInformation :id="currGroupId" ref="grpInfo" />
@@ -38,6 +38,7 @@ export default {
       isMobile: false,
       infoPane: false,
       currGroupId: null,
+      newMsg: 0,
     };
   },
   methods: {
@@ -64,6 +65,9 @@ export default {
       this.currGroupId = id;
       this.infoPane = true;
     },
+    updateMsg(msg){
+      this.newMsg = msg;
+    }
   },
   mounted() {
     this.onResize();
