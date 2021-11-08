@@ -7,7 +7,7 @@
       style="position: relative"
       scroll-target="#scrolling-techniques-3"
     >
-      <v-toolbar-title>Commutify</v-toolbar-title>
+      <v-toolbar-title><img width="150px" src="@/assets/Commutify-logos_transparent.png"></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -246,8 +246,8 @@ export default {
         `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
       );
       this.chatSocket.onmessage = function (e) {
-        console.log(e.data);
         var d = JSON.parse(e.data);
+        self.$emit('msg',d);
         if (self.$store.state.auth.username != d["sender"]) {
           for (var i = 0; i < self.friends.length; i++) {
             if (self.friends[i].room == d["room"]) {
