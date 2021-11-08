@@ -147,6 +147,7 @@ export default {
     },
     scroll() {
       const el = document.getElementsByClassName("renderedChats")[0];
+      console.log(el.scrollTop);
       el.onscroll = () => {
         if (!el.scrollTop) {
           console.log("scrolled to top");
