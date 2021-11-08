@@ -29,6 +29,11 @@
             >
           </v-list-item>
           <v-list-item>
+            <v-btn color="primary" @click="viewProfile()" class="logout_btn"
+              >My Profile</v-btn
+            >
+          </v-list-item>
+          <v-list-item>
             <v-dialog
               v-model="create_dialog"
               max-width="800px"
@@ -49,15 +54,15 @@
                     </v-btn>
                   </v-app-bar>
                   <v-card-text class="form">
-                    <v-form>
+                    <v-form v-on:submit.prevent>
                       <v-text-field
-                        name="login"
                         v-model="grp_name"
                         :rules="rules"
                         label="Group Name"
                         type="text"
                         :error-messages="error_grp_name"
                         outlined
+                        v-on:keyup.enter="CreateGroup"
                       ></v-text-field>
                       <v-textarea
                         v-model="grp_description"
@@ -293,6 +298,9 @@ export default {
           this.$router.go();
         })
         .catch((e) => console.log(e));
+    },
+    viewProfile() {
+      this.$router.push('../profile/' + String(this.$store.state.auth.username));
     },
   },
   created() {

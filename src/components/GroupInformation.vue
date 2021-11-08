@@ -14,22 +14,20 @@
           ><b>{{ groupDetails.name }}</b></span
         >
       </v-card-title>
-      <v-divider inset></v-divider>
-      <v-textarea
-        outlined
-        readonly
-        name="input-7-4"
-        label="Description"
-        :value="groupDetails.description"
-        rows="2"
-        disabled
-      ></v-textarea>
+
+
+      <v-card-text>
+      <p><u><i>Description</i></u></p>
+      <v-flex dark>
+        {{ groupDetails.description }}
+      </v-flex>
+    </v-card-text>
       <v-spacer></v-spacer>
       <v-dialog
         v-model="update_dialog"
         max-width="800px"
         transition="dialog-bottom-transition"
-        v-if = "isAdmin"
+        v-if="isAdmin"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-row justify="end">
@@ -56,7 +54,10 @@ import UpdateGroupInfo from "./UpdateGroupInfo.vue";
 import GroupMemberList from "./GroupMemberList.vue";
 
 export default {
-  components: { UpdateGroupInfo, GroupMemberList },
+  components: {
+    UpdateGroupInfo,
+    GroupMemberList,
+  },
   name: "GroupInformation",
   props: ["id"],
   data() {
@@ -105,6 +106,7 @@ export default {
   height: 100%;
   background-color: rgb(188, 197, 206);
 }
+
 .details {
   margin-top: 5%;
   width: 80%;
@@ -112,6 +114,4 @@ export default {
   background-color: rgb(104, 77, 77);
   margin-bottom: 5%;
 }
-
-
 </style>

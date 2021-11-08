@@ -13,7 +13,7 @@
             </v-btn>
               </v-app-bar>
               <v-card-text class="form">
-                <v-form>
+                <v-form v-on:submit.prevent>
                   <v-text-field
                     prepend-icon="person"
                     name="login"
@@ -22,6 +22,7 @@
                     label="Username"
                     type="text"
                     :error-messages="error_username"
+                    v-on:keyup.enter="login"
                   ></v-text-field>
                   <v-text-field
                     id="password"
@@ -35,6 +36,7 @@
                     @click:append="show = !show"
                     counter
                     :error-messages="error_password"
+                    v-on:keyup.enter="login"
                   ></v-text-field>
                 </v-form>
               </v-card-text>

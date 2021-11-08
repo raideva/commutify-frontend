@@ -13,7 +13,7 @@
             </v-btn>
               </v-app-bar>
               <v-card-text class="form">
-                <v-form>
+                <v-form v-on:submit.prevent>
                   <v-text-field
                     prepend-icon="person"
                     name="register"
@@ -22,6 +22,7 @@
                     label="Username"
                     :error-messages="error_username"
                     type="text"
+                    v-on:keyup.enter="register"
                   ></v-text-field>
                   <v-text-field
                     name="first_name"
@@ -31,6 +32,7 @@
                     label="First Name"
                     type="text"
                     :error-messages="error_first_name"
+                    v-on:keyup.enter="register"
                   ></v-text-field>
                   <v-text-field
                     name="last_name"
@@ -40,6 +42,7 @@
                     label="Last Name"
                     type="text"
                     :error-messages="error_last_name"
+                    v-on:keyup.enter="register"
                   ></v-text-field>
                   <v-text-field
                     name="email"
@@ -49,6 +52,7 @@
                     label="Email"
                     type="email"
                     :error-messages="error_email"
+                    v-on:keyup.enter="register"
                   ></v-text-field>
                   <v-text-field
                     name="dob"
@@ -58,6 +62,7 @@
                     label="Date Of Birth"
                     type="date"
                     :error-messages="error_dob"
+                    v-on:keyup.enter="register"
                   ></v-text-field>
 
                   <v-text-field
@@ -75,6 +80,7 @@
                     @click:append="show1 = !show1"
                     counter
                     :error-messages="error_password"
+                    v-on:keyup.enter="register"
                   >
                     <template v-slot:progress>
                     <v-progress-linear
@@ -102,6 +108,7 @@
                     @click:append="show2 = !show2"
                     counter
                     :error-messages="error_password1"
+                    v-on:keyup.enter="register"
                   >
                     <template v-slot:progress>
                     <v-progress-linear

@@ -17,9 +17,9 @@
                     </v-btn>
                 </v-app-bar>
                 <v-card-text class="form">
-                    <v-form>
+                    <v-form v-on:submit.prevent>
                         <v-container style="height: 30px"></v-container>
-                        <v-text-field name="new_username" v-model="new_username" :rules="rules" label="Username" type="text" :error-messages="error_message" outlined></v-text-field>
+                        <v-text-field v-model="new_username" :rules="rules" label="Username" type="text" :error-messages="error_message" outlined @keypress.enter="InviteUser()" clearable></v-text-field>
                     </v-form>
                 </v-card-text>
                 <v-card-actions class="form">
@@ -49,7 +49,7 @@
 
                 <v-card color="#385F73" dark class="users" v-for="user in admins" :key="user.username">
                     <v-card-title class="d-inline-flex">{{ user.username }}</v-card-title>
-                    <v-menu left bottom class="options" v-if="you.isAdmin">
+                    <v-menu left bottom class="options">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn icon v-bind="attrs" v-on="on" class="options">
                                 <v-icon>mdi-dots-vertical</v-icon>
@@ -57,11 +57,14 @@
                         </template>
 
                         <v-list>
-                            <v-list-item>
+                            <v-list-item v-if="you.isAdmin">
                                 <v-list-item-title @click="Remove(user.username)">Remove</v-list-item-title>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item v-if="you.isAdmin">
                                 <v-list-item-title @click="dismissAdmin(user.username)">Dismiss Admin</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title @click="viewProfile(user.username)">View Profile</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -74,7 +77,7 @@
 
                 <v-card color="#385F73" dark class="users" v-for="user in members" :key="user.username">
                     <v-card-title class="d-inline-flex">{{ user.username }}</v-card-title>
-                    <v-menu left bottom class="options" v-if="you.isAdmin">
+                    <v-menu left bottom class="options">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn icon v-bind="attrs" v-on="on" class="options">
                                 <v-icon>mdi-dots-vertical</v-icon>
@@ -82,11 +85,14 @@
                         </template>
 
                         <v-list>
-                            <v-list-item>
+                            <v-list-item v-if="you.isAdmin">
                                 <v-list-item-title @click="Remove(user.username)">Remove</v-list-item-title>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item v-if="you.isAdmin">
                                 <v-list-item-title @click="makeAdmin(user.username)">Make Group Admin</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title @click="viewProfile(user.username)">View Profile</v-list-item-title>
                             </v-list-item>
 
                         </v-list>
@@ -124,6 +130,10 @@ export default {
         };
     },
     methods: {
+        viewProfile(username) {
+            this.$router.push('../profile/' + String(username));
+        },
+
         Close() {
             this.addMemberDialog = false;
             this.new_username = "";
@@ -204,6 +214,10 @@ export default {
                 .catch((e) => console.log(e));
         },
         InviteUser() {
+            if (this.new_username === "") {
+                this.error_message = "This field is required";
+                return;
+            }
             axios({
                     headers: {
                         Authorization: "Token " + this.$store.state.auth.token
