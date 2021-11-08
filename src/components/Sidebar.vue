@@ -7,12 +7,14 @@
       style="position: relative"
       scroll-target="#scrolling-techniques-3"
     >
-      <v-toolbar-title><img width="150px" src="@/assets/Commutify-logos_transparent.png"></v-toolbar-title>
+      <v-toolbar-title
+        ><img width="150px" src="@/assets/Commutify-logos_transparent.png"
+      /></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon @click="clearMessage">mdi-magnify</v-icon>
       </v-btn>
 
       <v-menu left bottom>
@@ -94,7 +96,6 @@
           </v-list-item>
         </v-list>
       </v-menu>
-
       <template v-slot:extension>
         <v-tabs v-model="tab" fixed-tabs>
           <v-tab>Friends </v-tab>
@@ -102,6 +103,16 @@
         </v-tabs>
       </template>
     </v-app-bar>
+    <template>
+      <v-container v-show="search">
+        <v-text-field
+          type="text"
+          v-model.trim="filter"
+          @click:append="clearMessage"
+          append-icon="mdi-close-circle"
+        ></v-text-field>
+      </v-container>
+    </template>
     <v-sheet
       id="scrolling-techniques-3"
       class="overflow-y-auto"
@@ -111,13 +122,19 @@
         <v-tab-item key="Friends">
           <div
             flat
-            class="listItem"
             v-for="friend in friends"
             :key="friend.id"
             @click="displayChats(friend, 1)"
           >
-            <v-card class="listItem">
-              <v-list-item class="grow">
+            <v-card
+              class="listItem"
+              v-show="
+                `${friend.first_name} ${friend.last_name}`
+                  .toLowerCase()
+                  .includes(filter.toLowerCase())
+              "
+            >
+              <v-list-item class="listItem grow">
                 <v-list-item-avatar>
                   <v-icon> mdi-account-circle </v-icon>
                 </v-list-item-avatar>
@@ -142,13 +159,14 @@
         <v-tab-item key="Groups">
           <div
             flat
-            class="listItem"
             v-for="group in groups"
-            :key="group.id"
+            :key="`gr-${group.id}`"
             @click="displayChats(group, 0)"
           >
-            <v-card class="listItem">
-              <v-list-item class="grow">
+            <v-card
+              v-show="group.name.toLowerCase().includes(filter.toLowerCase())"
+            >
+              <v-list-item class="listItem grow">
                 <v-list-item-avatar>
                   <v-icon> mdi-account-circle </v-icon>
                 </v-list-item-avatar>
@@ -185,7 +203,9 @@ export default {
       groups: [],
       chatSocket: null,
       create_dialog: false,
+      search: false,
       grp_name: "",
+      filter: "",
       grp_description: "",
       error_grp_name: "",
       error_grp_description: "",
@@ -196,7 +216,10 @@ export default {
     ...mapActions({
       setToken: "auth/setToken",
     }),
-
+    clearMessage() {
+      this.filter = "";
+      this.search = !this.search;
+    },
     Close() {
       this.create_dialog = false;
     },
@@ -247,7 +270,7 @@ export default {
       );
       this.chatSocket.onmessage = function (e) {
         var d = JSON.parse(e.data);
-        self.$emit('msg',d);
+        self.$emit("msg", d);
         if (self.$store.state.auth.username != d["sender"]) {
           for (var i = 0; i < self.friends.length; i++) {
             if (self.friends[i].room == d["room"]) {
@@ -300,7 +323,9 @@ export default {
         .catch((e) => console.log(e));
     },
     viewProfile() {
-      this.$router.push('../profile/' + String(this.$store.state.auth.username));
+      this.$router.push(
+        "../profile/" + String(this.$store.state.auth.username)
+      );
     },
   },
   created() {
