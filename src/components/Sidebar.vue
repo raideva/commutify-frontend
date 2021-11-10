@@ -36,6 +36,11 @@
             >
           </v-list-item>
           <v-list-item>
+            <v-btn color="primary" @click="requests()" class="logout_btn"
+              >Requests</v-btn
+            >
+          </v-list-item>
+          <v-list-item>
             <v-dialog
               v-model="create_dialog"
               max-width="800px"
@@ -77,6 +82,8 @@
                         :error-messages="error_grp_description"
                         rows="2"
                       ></v-textarea>
+                      <label for="pass" style="font-size: large;">Profile Image : </label>
+                      <input type="file" ref="input1" @change="previewImage" accept="image/*">
                     </v-form>
                   </v-card-text>
                   <v-card-actions class="form">
@@ -136,7 +143,7 @@
             >
               <v-list-item class="listItem grow">
                 <v-list-item-avatar>
-                  <v-icon> mdi-account-circle </v-icon>
+                  <img :src="friend.img_url" />
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{
@@ -168,7 +175,7 @@
             >
               <v-list-item class="listItem grow">
                 <v-list-item-avatar>
-                  <v-icon> mdi-account-circle </v-icon>
+                  <img :src="group.img_url" />
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{ group.name }}</v-list-item-title>
@@ -192,6 +199,7 @@
 <script>
 import axios from "axios";
 import { mapActions } from "vuex";
+import firebase from 'firebase'
 
 export default {
   name: "Sidebar",
@@ -210,12 +218,41 @@ export default {
       error_grp_name: "",
       error_grp_description: "",
       rules: [(value) => !!value || "Required."],
+      img1: '',
+      imageData: null
     };
   },
   methods: {
     ...mapActions({
       setToken: "auth/setToken",
     }),
+
+    previewImage(event) {
+            this.uploadValue = 0;
+            this.img1 = null;
+            this.imageData = event.target.files[0];
+            console.log(this.imageData);
+            this.onUpload();
+        },
+
+        onUpload() {
+            this.img1 = null;
+            const storageRef = firebase.storage().ref("new_grp_" + `${this.imageData.name}`).put(this.imageData);
+            storageRef.on(`state_changed`, snapshot => {
+                    this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                }, error => {
+                    console.log(error.message)
+                },
+                () => {
+                    this.uploadValue = 100;
+                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                        this.img1 = url;
+                        console.log(this.img1)
+                    });
+                }
+            );
+        },
+
     clearMessage() {
       this.filter = "";
       this.search = !this.search;
@@ -317,14 +354,39 @@ export default {
       })
         .then((res) => {
           this.create_dialog = false;
-          console.log(res);
-          this.$router.go();
-        })
+          console.log(res.data.id);
+          if(this.img1 === ''){
+            this.$router.go();
+          }
+          else {
+            axios({
+                    headers: {
+                        Authorization: "Token " + this.$store.state.auth.token
+                    },
+                    url: "api/groupImageUpdate/",
+                    method: "post",
+                    data: {
+                        'img_url' : this.img1,
+                        'grp_id' : res.data.id,
+                    },
+                })
+                .then((res) => {
+                    console.log(res);
+                    this.$router.go();
+                })
+                .catch((e) => console.log(e));}
+          }   
+        )
         .catch((e) => console.log(e));
     },
     viewProfile() {
       this.$router.push(
         "../profile/" + String(this.$store.state.auth.username)
+      );
+    },
+    requests() {
+      this.$router.push(
+        "../requests/" 
       );
     },
   },
@@ -357,6 +419,7 @@ export default {
 .btn {
   align-self: center;
   color: white;
+  margin-top: 20px;
 }
 .center {
   margin: 0;

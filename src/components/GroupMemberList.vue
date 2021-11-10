@@ -155,7 +155,8 @@ export default {
                     this.members = res.data["members"];
                     this.admins = res.data["admins"];
                     this.you = res.data["user"][0];
-                    this.$emit("update_isAdmin");
+                    if(this.you.isAdmin){
+                    this.$emit("update_isAdmin");}
                 })
                 .catch((e) => console.log(e));
         },
