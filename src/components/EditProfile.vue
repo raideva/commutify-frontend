@@ -13,6 +13,8 @@
                 <v-text-field name="first_name" v-model="first_name" :rules="rules" label="First Name" type="text" :error-messages="error_first_name" outlined :value="first_name" v-on:keyup.enter="UpdateProfile"></v-text-field>
                 <v-text-field name="last_name" v-model="last_name" :rules="rules" label="Last Name" type="text" :error-messages="error_last_name" outlined :value="last_name" v-on:keyup.enter="UpdateProfile" ></v-text-field>
                 <v-text-field name="status" v-model="status" :rules="rules" label="Status" type="text" :error-messages="error_status" outlined :value="status" v-on:keyup.enter="UpdateProfile" ></v-text-field>
+                <label for="pass" style="font-size: large;">Profile Image : </label>
+                <input type="file" ref="input1" @change="previewImage" accept="image/*">
             </v-form>
         </v-card-text>
         <v-card-actions class="form">
@@ -26,6 +28,7 @@
 
 <script>
 import axios from "axios";
+import firebase from 'firebase';
 
 export default {
     name: "Dialog_for_grp_update",
@@ -40,11 +43,39 @@ export default {
             first_name: this.userDetails.fname,
             last_name: this.userDetails.lname,   
             status: this.userDetails.status,
+            img1: '',
+            imageData: null
         };
     },
     methods: {
         Close() {
             this.$emit("close");
+        },
+
+        previewImage(event) {
+            this.uploadValue = 0;
+            this.img1 = null;
+            this.imageData = event.target.files[0];
+            console.log(this.imageData);
+            this.onUpload();
+        },
+
+        onUpload() {
+            this.img1 = null;
+            const storageRef = firebase.storage().ref(`${this.userDetails.username}` + `${this.imageData.name}`).put(this.imageData);
+            storageRef.on(`state_changed`, snapshot => {
+                    this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                }, error => {
+                    console.log(error.message)
+                },
+                () => {
+                    this.uploadValue = 100;
+                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                        this.img1 = url;
+                        console.log(this.img1)
+                    });
+                }
+            );
         },
 
         UpdateProfile() {
@@ -75,11 +106,32 @@ export default {
                     },
                 })
                 .then((res) => {
+                    console.log(res);
+                })
+                .catch((e) => console.log(e));
+
+            if(this.img1 === ''){
+                this.$emit("update");
+                    this.$emit("close");
+            }
+            else {
+            
+            axios({
+                    headers: {
+                        Authorization: "Token " + this.$store.state.auth.token
+                    },
+                    url: "api/profileImageUpdate/",
+                    method: "post",
+                    data: {
+                        'img_url' : this.img1,
+                    },
+                })
+                .then((res) => {
                     this.$emit("update");
                     this.$emit("close");
                     console.log(res);
                 })
-                .catch((e) => console.log(e));
+                .catch((e) => console.log(e));}
         },
 
     },
@@ -92,6 +144,7 @@ export default {
 }
 
 .btn {
+    margin-top: 60px;
     align-self: center;
     color: white;
 }

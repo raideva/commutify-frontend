@@ -8,7 +8,7 @@
     <div class="profile">
         <div class="profile-pic">
             <div class="header-color"></div>
-            <img src="https://anniedotexe.github.io/hosted-assets/dailyui/dailyui006/profile-pic.jpg" alt="Profile Picture" />
+            <img :src="image_url" />
         </div>
         <div class="title">
             <h1>{{ `${userDetails.fname} ${userDetails.lname}` }}</h1>
@@ -21,7 +21,7 @@
             <template v-slot:activator="{ on, attrs }">
                 <button v-bind="attrs" v-on="on" class="follow">Edit Profile</button>
             </template>
-            <edit-profile :userDetails="userDetails" @close='Close_dialog' @update="getDetails" />
+            <edit-profile :userDetails="userDetails" @close='Close_dialog' @update="Update" />
         </v-dialog>
 
         <button v-show="isFriend === true" @click="removefriend()" class="follow">Remove Friend</button>
@@ -52,9 +52,14 @@ export default {
             isUser: false,
             isSent: false,
             edit_profile_dialog: false,
+            image_url: "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png",
         };
     },
     methods: {
+        Update() {
+            this.getProfileImage();
+            this.getDetails();
+        },
         Close_dialog() {
             this.edit_profile_dialog = false;
         },
@@ -64,6 +69,17 @@ export default {
             this.axios
                 .get(`api/profile/${this.username}/`)
                 .then((res) => (this.userDetails = res.data))
+                .catch((e) => console.log(e));
+        },
+        getProfileImage() {
+            axios({
+                    url: `api/profileImage/0/${this.username}/`,
+                    method: "get",
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    this.image_url = res.data.img_url;
+                })
                 .catch((e) => console.log(e));
         },
         SendRequest(username) {
@@ -142,6 +158,7 @@ export default {
         this.checkFriend();
         this.getDetails();
         this.makeConnection();
+        this.getProfileImage();
     },
 };
 </script>
