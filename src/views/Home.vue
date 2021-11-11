@@ -107,6 +107,7 @@ html, body {
 
 #nochatopen{
   background: url("https://i.guim.co.uk/img/media/3ae369f9334cfa1486513a3a1780ea1bad8ee3a0/0_189_5320_3191/master/5320.jpg?width=1200&quality=85&auto=format&fit=max&s=6e98b988b50db8a8419636267f7ce05a");
+  background-size: cover;
   min-height: 100vh;
   overflow: hidden;
   width: 100%;

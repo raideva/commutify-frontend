@@ -8,6 +8,7 @@
           : 'msg received'
       "
     >
+      <p v-show="isFriend" class="sender"><i>{{ message.sender }}</i></p>
       <p class="msg">{{ message.message }}</p>
       <p class="time">{{ getFormattedDate(message.dttime) }}</p>
     </div>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  props: ["message"],
+  props: ["message", "isFriend"],
   methods: {
     getFormattedDate(s){
       const date = `${s.substr(8,2)}/${s.substr(5,2)}/${s.substr(0,4)}`;
@@ -38,17 +39,19 @@ p{
   margin: 0;
 }
 
-.received .time{
+.time{
   text-align: right;
+  float: right;
 }
 
 .sent {
+  margin-bottom: 2px;
   background-color: #395dff;
   color: white;
+  border-radius: 8px;
   /* border-top-right-radius: 1000px; */
   /* flex-direction: row-reverse; */
   /* padding: 20px 20px 0 10px; */
-  text-align: end;
   margin-right: 10px;
   border-top-right-radius: 0px;
   float: right;
@@ -60,10 +63,16 @@ p{
   margin-left: 10px;
   border-top-left-radius: 0px;
   float: left;
+  color: black;
 }
 
 .time {
   font-size: 10px;
+}
+
+.sender {
+  font-size: 11px;
+  font-weight: 300;
 }
 
 </style>
