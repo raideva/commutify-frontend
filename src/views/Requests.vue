@@ -1,11 +1,15 @@
 <template>
-<div>
+<div class="main">
     <nav id="navbar">
         <img src="../assets/Commutify-logos_white.png" alt="" class="logo" />
+        <v-spacer></v-spacer>
+         <v-btn icon x-large dark class="home" @click="home">
+              <v-icon>mdi-home</v-icon>
+            </v-btn>
     </nav>
     <v-container class="requests">
 
-        <v-flex>
+        <v-flex class="flex-s">
 
             <v-text-field v-model="search_username" outlined clearable label="Username" type="text" :error-messages="error_search" class="search_c" v-on:keyup.enter="viewProfile">
             </v-text-field>
@@ -14,7 +18,7 @@
 
         </v-flex>
 
-        <v-card v-for="item in requests" :key="item.index" class="cards" @click="show(item)">
+        <v-card v-for="item in requests" :key="item.index" class="cards" @click="show(item)" dark>
             <div class="text-h5" v-if="item.type">
                 <v-card-title> {{ item.name }} </v-card-title>
                 <v-card-text class="text-h7">
@@ -53,6 +57,11 @@ export default {
         ...mapActions({
             setToken: "auth/setToken",
         }),
+
+        home() {
+            this.$router.push('../');
+        },
+
         show(a) {
             var st = a.type === 1 ? a.name : a.username;
             this.$fire({
@@ -163,6 +172,7 @@ body {
     align-items: center;
     padding: 20px 8%;
     margin-bottom: 15px;
+    height: 80px;
 }
 
 #navbar .logo {
@@ -187,6 +197,7 @@ body {
 
 .cards {
     margin-bottom: 30px;
+    background-image: url(https://cdn.wallpapersafari.com/56/24/2vToq9.jpg);
 }
 
 .tags {
@@ -206,15 +217,26 @@ body {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    margin-bottom: 40px;
 }
 
 .search_c {
     width: 50%;
-    margin-top: 3%;
+    min-width: 300px;
+    margin-top: 5%;
     position: relative;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    background-color: bisque;
+    height: 55px;
 }
+
+.main {
+    background-image: url(https://vip-go.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/shutterstock_407554567.jpg?w=750);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
 </style>
