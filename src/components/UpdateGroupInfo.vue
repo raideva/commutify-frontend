@@ -14,6 +14,7 @@
                 <v-textarea v-model="cur_grp_description" :rules="rules" auto-grow filled color="deep-purple" label="Group Description" type="text" :error-messages="error_grp_description" rows="2" :value="grp_description"></v-textarea>
                 <label for="pass" style="font-size: large;">Group Image : </label>
                 <input type="file" ref="input1" @change="previewImage" accept="image/*">
+                <label v-if="show_loading" class="load">Loading...</label>
             </v-form>
         </v-card-text>
         <v-card-actions class="form">
@@ -40,7 +41,8 @@ export default {
             cur_grp_name: this.grp_name,
             cur_grp_description: this.grp_description,
             img1: '',
-            imageData: null
+            imageData: null,
+            show_loading: false,
         };
     },
     methods: {
@@ -60,11 +62,13 @@ export default {
             const storageRef = firebase.storage().ref(`${this.id}` + `${this.imageData.name}`).put(this.imageData);
             storageRef.on(`state_changed`, snapshot => {
                     this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this.show_loading = true;
                 }, error => {
                     console.log(error.message)
                 },
                 () => {
                     this.uploadValue = 100;
+                    this.show_loading = false;
                     storageRef.snapshot.ref.getDownloadURL().then((url) => {
                         this.img1 = url;
                         console.log(this.img1)
@@ -144,5 +148,8 @@ export default {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+.load {
+    color: blue;
 }
 </style>

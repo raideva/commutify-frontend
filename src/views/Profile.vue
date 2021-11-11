@@ -1,7 +1,11 @@
 <template>
-<div class="grey lighten-5">
+<div class="main">
     <nav id="navbar">
         <img src="../assets/Commutify-logos_white.png" alt="" class="logo" />
+        <v-spacer></v-spacer>
+         <v-btn icon x-large dark class="home" @click="home">
+              <v-icon>mdi-home</v-icon>
+            </v-btn>
     </nav>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
@@ -16,7 +20,7 @@
                 <span class="highlighted">{{ userDetails.username }}</span>
             </h2>
         </div>
-        <div class="description">{{ userDetails.status }}</div>
+        <div class="description"> <i><u>{{ userDetails.status }}</u></i></div>
         <v-dialog v-model="edit_profile_dialog" max-width="600px" transition="dialog-top-transition" v-if="isUser">
             <template v-slot:activator="{ on, attrs }">
                 <button v-bind="attrs" v-on="on" class="follow">Edit Profile</button>
@@ -30,7 +34,10 @@
         </button>
         <h2 v-show="isSent">Request Pending</h2>
         <div class="friends">
-            <i class="fas fa-heart"><span>{{ userDetails.frcount }} Friend<span v-show="userDetails.frcount > 1">s</span></span></i>
+            <i class="fas fa-heart"><span>{{ userDetails.frcount }} 
+                <span v-if="userDetails.frcount > 1">Friends</span>
+                <span v-else>Friend</span>
+                </span></i>
         </div>
     </div>
 </div>
@@ -62,6 +69,10 @@ export default {
         },
         Close_dialog() {
             this.edit_profile_dialog = false;
+        },
+
+        home() {
+            this.$router.push('../');
         },
 
         getDetails() {
@@ -178,6 +189,7 @@ export default {
     align-items: center;
     padding: 20px 8%;
     margin-bottom: 15px;
+    height: 80px;
 }
 
 #navbar .logo {
@@ -210,8 +222,7 @@ body {
 
 .profile {
     margin: auto;
-    height: 710px;
-    width: 400px;
+    max-width: 400px;
     background: #ffffff;
     display: flex;
     flex-direction: column;
@@ -224,6 +235,13 @@ body {
     scrollbar-width: none;
     /* for Firefox */
     overflow-y: scroll;
+    background-image: url(https://esupport.ws/wp-content/uploads/2014/06/dark-website-background.jpg);
+}
+
+.main {
+    background-image: url(https://www.lsass.co.uk/wp-content/uploads/2016/10/dark-black-website-background.jpg);
+    width: 100%;
+    height: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -239,11 +257,11 @@ body {
 }
 
 .profile-pic img {
-    height: 200px;
-    width: 200px;
+    height: 250px;
+    width: 250px;
     border-radius: 50%;
     border: 10px solid #ffffff;
-    margin-top: -100px;
+    margin-top: -125px;
 }
 
 .title {
@@ -256,6 +274,7 @@ h1 {
     color: #131b23;
     margin-bottom: 10px;
     letter-spacing: 0.025em;
+    color: azure;
 }
 
 h2 {
@@ -264,7 +283,7 @@ h2 {
     color: #131b23;
 
     span {
-        color: #4f759b;
+        color: #6e9ece;
         font-weight: 700;
     }
 }
@@ -273,6 +292,7 @@ h2 {
     margin-bottom: 25px;
     color: #131b23;
     letter-spacing: 0.01em;
+    color: aquamarine;
 
     p:not(:last-child) {
         margin-bottom: 5px;
@@ -296,22 +316,26 @@ button {
 }
 
 button:hover {
-    width: 115px;
-    background: #4f759be0;
+    background: #114579e0;
 }
 
 .friends i {
-    color: #9b1d20;
+    color: #e73033;
     display: flex;
     align-items: center;
     margin-left: 10px;
+    margin-bottom: 50px;
 
     span {
         margin-left: 5px;
         font-family: "Open Sans", sans-serif;
         font-size: 14px;
         font-weight: 400;
-        color: #000000;
+        color: #ffffff;
     }
+}
+
+.home {
+    margin-top: 20px;
 }
 </style>
