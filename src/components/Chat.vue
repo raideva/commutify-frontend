@@ -8,7 +8,7 @@
     />
     <div class="renderedChats" ref="chatDiv" @scroll="scroll()">
       <div flat v-for="msg in msgs" :key="msg.id">
-        <Message :message="msg" />
+        <Message :isFriend="currChat.name!==undefined" :message="msg" id="indvMsg" :class="msg.sender === $store.state.auth.username?'sent':'rec'" />
       </div>
     </div>
     <v-form :class="compress?'sendMsg smaller':'sendMsg'">
@@ -16,7 +16,7 @@
         <v-row>
           <v-col>
             <v-text-field
-              hide-details
+              hide-details dark class="msgBox"
               mb-1
               v-model.trim="message"
               :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
@@ -31,6 +31,7 @@
               @click:append-outer="sendMessage"
               @click:prepend="changeIcon"
               @click:clear="clearMessage"
+              v-on:keyup.enter="sendMessage"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -54,7 +55,7 @@ export default {
   data() {
     return {
       show: false,
-      message: "Hey!",
+      message: "",
       marker: true,
       iconIndex: 0,
       index: 999,
@@ -184,13 +185,15 @@ export default {
 <style scoped>
 .renderedChats {
   /* height: auto; */
+  background-image: url('https://i.pinimg.com/736x/42/cf/3a/42cf3a619ec6054b2c0e4ac268a66622--dark-wallpaper-nature-wallpaper.jpg');
+  background-size: cover;
   height: 100vh;
   overflow: scroll;
-  margin: 20px 0;
   margin-bottom: 2000px;
   display: flex;
   flex-direction: column;
   padding-bottom: 150px;
+  padding-top: 10px
 }
 
 .v-input {
@@ -200,7 +203,7 @@ export default {
 }
 
 .sendMsg {
-  background-color: white;
+  background-color: #181d20;
   width: 75%;
   padding: 0;
   margin: 0;
@@ -218,10 +221,22 @@ export default {
 }
 
 .smaller{
-  width: 40%;
+  width: 42%;
 }
 
 .col {
   padding: 0;
+}
+
+.rec{
+  max-width: 70%;
+}
+.sent{
+  max-width: 70%;
+}
+.msgBox{
+  padding: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 </style>
