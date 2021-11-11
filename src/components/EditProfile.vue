@@ -15,6 +15,7 @@
                 <v-text-field name="status" v-model="status" :rules="rules" label="Status" type="text" :error-messages="error_status" outlined :value="status" v-on:keyup.enter="UpdateProfile" ></v-text-field>
                 <label for="pass" style="font-size: large;">Profile Image : </label>
                 <input type="file" ref="input1" @change="previewImage" accept="image/*">
+                <label v-if="show_loading" class="load">Loading...</label>
             </v-form>
         </v-card-text>
         <v-card-actions class="form">
@@ -44,7 +45,8 @@ export default {
             last_name: this.userDetails.lname,   
             status: this.userDetails.status,
             img1: '',
-            imageData: null
+            imageData: null,
+            show_loading: false,
         };
     },
     methods: {
@@ -65,11 +67,13 @@ export default {
             const storageRef = firebase.storage().ref(`${this.userDetails.username}` + `${this.imageData.name}`).put(this.imageData);
             storageRef.on(`state_changed`, snapshot => {
                     this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this.show_loading = true;
                 }, error => {
                     console.log(error.message)
                 },
                 () => {
                     this.uploadValue = 100;
+                    this.show_loading = false;
                     storageRef.snapshot.ref.getDownloadURL().then((url) => {
                         this.img1 = url;
                         console.log(this.img1)
@@ -156,5 +160,8 @@ export default {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+.load {
+    color: blue;
 }
 </style>
