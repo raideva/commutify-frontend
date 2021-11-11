@@ -27,9 +27,7 @@
 
         <v-list class="options">
           <v-list-item>
-            <v-btn dark @click="logout()" class="logout_btn"
-              >Logout</v-btn
-            >
+            <v-btn dark @click="logout()" class="logout_btn">Logout</v-btn>
           </v-list-item>
           <v-list-item>
             <v-btn dark @click="viewProfile()" class="logout_btn"
@@ -37,9 +35,7 @@
             >
           </v-list-item>
           <v-list-item>
-            <v-btn dark @click="requests()" class="logout_btn"
-              >Requests</v-btn
-            >
+            <v-btn dark @click="requests()" class="logout_btn">Requests</v-btn>
           </v-list-item>
           <v-list-item>
             <v-dialog
@@ -48,9 +44,7 @@
               transition="dialog-top-transition"
             >
               <template v-slot:activator="{ on, attrs }">
-                <v-btn dark v-bind="attrs" v-on="on">
-                  New Group
-                </v-btn>
+                <v-btn dark v-bind="attrs" v-on="on"> New Group </v-btn>
               </template>
               <div>
                 <v-card class="elevation-25" fluid fill-width>
@@ -83,8 +77,15 @@
                         :error-messages="error_grp_description"
                         rows="2"
                       ></v-textarea>
-                      <label for="pass" style="font-size: large;">Profile Image : </label>
-                      <input type="file" ref="input1" @change="previewImage" accept="image/*">
+                      <label for="pass" style="font-size: large"
+                        >Profile Image :
+                      </label>
+                      <input
+                        type="file"
+                        ref="input1"
+                        @change="previewImage"
+                        accept="image/*"
+                      />
                       <label v-if="show_loading" class="load">Loading...</label>
                     </v-form>
                   </v-card-text>
@@ -115,7 +116,8 @@
     <template>
       <div v-show="search">
         <v-text-field
-          hide-details dark
+          hide-details
+          dark
           class="InputBox"
           type="text"
           v-model.trim="filter"
@@ -220,7 +222,7 @@ export default {
       error_grp_name: "",
       error_grp_description: "",
       rules: [(value) => !!value || "Required."],
-      img1: '',
+      img1: "",
       imageData: null,
       show_loading: false,
     };
@@ -237,30 +239,25 @@ export default {
       console.log(this.imageData);
       this.onUpload();
     },
-        onUpload() {
-            this.img1 = null;
-            const storageRef = firebase.storage().ref("new_grp_" + `${this.imageData.name}`).put(this.imageData);
-            storageRef.on(`state_changed`, snapshot => {
-                    this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    this.show_loading = true;
-                }, error => {
-                    console.log(error.message)
-                },
-                () => {
-                    this.uploadValue = 100;
-                    this.show_loading = false;
-                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
-                        this.img1 = url;
-                        console.log(this.img1)
-                    });
-                }
-            );
+    onUpload() {
+      this.img1 = null;
+      const storageRef = firebase
+        .storage()
+        .ref("new_grp_" + `${this.imageData.name}`)
+        .put(this.imageData);
+      storageRef.on(
+        `state_changed`,
+        (snapshot) => {
+          this.uploadValue =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.show_loading = true;
         },
         (error) => {
           console.log(error.message);
         },
         () => {
           this.uploadValue = 100;
+          this.show_loading = false;
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.img1 = url;
             console.log(this.img1);
@@ -443,7 +440,8 @@ export default {
   transform: translate(-50%, -50%);
 }
 .load {
-    color: blue;
+  color: blue;
+}
 .List {
   overflow: scroll;
   height: 100vh;
@@ -453,7 +451,7 @@ export default {
   background-image: url("https://i.pinimg.com/736x/77/84/36/77843609952f167bbf7393b8f303cd1b.jpg");
   background-size: cover;
 }
-.InputBox{
+.InputBox {
   padding: 12px;
   padding-bottom: 10px;
   padding-top: 15px;
