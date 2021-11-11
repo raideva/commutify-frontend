@@ -19,7 +19,7 @@ export default {
       let verify_pin = this.$route.params.pin
       console.log(email,verify_pin);
       this.axios.get(`auth/verify/${email}/${verify_pin}/`)
-        .then(()=>{this.verified=true;this.$router.push('/login/')})
+        .then(()=>{this.verified=true;this.$router.push('/main/')})
         .catch(err=>console.log(err.response.data))
     },
   },
