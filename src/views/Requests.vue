@@ -172,7 +172,7 @@ body {
     align-items: center;
     padding: 20px 8%;
     margin-bottom: 15px;
-    height: 80px;
+    height: 60px;
 }
 
 #navbar .logo {
@@ -197,7 +197,7 @@ body {
 
 .cards {
     margin-bottom: 30px;
-    background-image: url(https://cdn.wallpapersafari.com/56/24/2vToq9.jpg);
+    background-image: url('../assets/grpMemberList.webp');
 }
 
 .tags {
@@ -234,7 +234,7 @@ body {
 }
 
 .main {
-    background-image: url(https://vip-go.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/shutterstock_407554567.jpg?w=750);
+    background-image: url('../assets/triangle.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }

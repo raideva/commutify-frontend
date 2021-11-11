@@ -185,7 +185,7 @@ export default {
 <style scoped>
 .renderedChats {
   /* height: auto; */
-  background-image: url('https://i.pinimg.com/736x/42/cf/3a/42cf3a619ec6054b2c0e4ac268a66622--dark-wallpaper-nature-wallpaper.jpg');
+  background-image: url('../assets/chatBackground.png');
   background-size: cover;
   height: 100vh;
   overflow: scroll;

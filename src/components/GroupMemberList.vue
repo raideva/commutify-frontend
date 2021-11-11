@@ -326,7 +326,7 @@ export default {
 
 .users {
   margin-bottom: 2%;
-  background-image: url('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/p-421-jir8761-chim.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=8b47128d8398baea68b5135d90232432');
+  background-image: url('../assets/userCard.jpg');
 }
 
 .options {
@@ -339,7 +339,7 @@ export default {
 }
 
 .listMem {
-  background-image: url("https://cdn.wallpapersafari.com/56/24/2vToq9.jpg");
+  background-image: url("../assets/grpMemberList.webp");
 }
 .v-list-item > .v-btn {
   width: 100%;

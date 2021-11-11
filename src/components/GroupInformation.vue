@@ -140,7 +140,7 @@ export default {
 
 .details {
   margin-top: 5%;
-  background-image: url('https://cdn.wallpapersafari.com/56/24/2vToq9.jpg');
+  background-image: url('../assets/grpMemberList.webp');
   width: 80%;
   margin-left: 10%;
   background-color: rgb(104, 77, 77);
@@ -162,7 +162,7 @@ export default {
 }
 
 .GrpInfo {
-  background-image: url("https://i.pinimg.com/736x/77/84/36/77843609952f167bbf7393b8f303cd1b.jpg");
+  background-image: url("../assets/sidebarBackground.jpg");
   background-size: cover;
 }
 

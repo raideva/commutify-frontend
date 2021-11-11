@@ -4,7 +4,7 @@
         <img src="../assets/Commutify-logos_white.png" alt="" class="logo" />
         <v-spacer></v-spacer>
          <v-btn icon x-large dark class="home" @click="home">
-              <v-icon>mdi-home</v-icon>
+              <v-icon dark>mdi-home</v-icon>
             </v-btn>
     </nav>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -189,7 +189,7 @@ export default {
     align-items: center;
     padding: 20px 8%;
     margin-bottom: 15px;
-    height: 80px;
+    height: 60px;
 }
 
 #navbar .logo {
@@ -235,11 +235,11 @@ body {
     scrollbar-width: none;
     /* for Firefox */
     overflow-y: scroll;
-    background-image: url(https://esupport.ws/wp-content/uploads/2014/06/dark-website-background.jpg);
+    background-image: url('../assets/dark-website-background.jpg');
 }
 
 .main {
-    background-image: url(https://www.lsass.co.uk/wp-content/uploads/2016/10/dark-black-website-background.jpg);
+    background-image: url('../assets/square.jpg');
     width: 100%;
     height: 100%;
 }
@@ -337,5 +337,6 @@ button:hover {
 
 .home {
     margin-top: 20px;
+    background: none;
 }
 </style>

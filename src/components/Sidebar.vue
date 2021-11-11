@@ -448,7 +448,7 @@ export default {
   max-height: 100vh;
   background-color: black;
   padding-bottom: 100px;
-  background-image: url("https://i.pinimg.com/736x/77/84/36/77843609952f167bbf7393b8f303cd1b.jpg");
+  background-image: url("../assets/sidebarBackground.jpg");
   background-size: cover;
 }
 .InputBox {
