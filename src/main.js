@@ -11,7 +11,7 @@ import firebase from 'firebase'
  
 Vue.use(VueSimpleAlert);
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+axios.defaults.baseURL = 'https://commutify-backend.herokuapp.com/'
 
 Vue.use(VueAxios, axios)
 
