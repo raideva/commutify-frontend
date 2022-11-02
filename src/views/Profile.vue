@@ -96,12 +96,12 @@ export default {
         SendRequest(username) {
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/fr_request/",
                     method: "post",
                     data: {
-                        username: username,
+                        user_name: username,
                     },
                 })
                 .then((res) => {
@@ -133,7 +133,7 @@ export default {
             }
             axios({
                 headers: {
-                    Authorization: "Token " + this.$store.state.auth.token
+                    "token": this.$store.state.auth.token
                 },
                 url: "api/friends/",
                 method: "get",

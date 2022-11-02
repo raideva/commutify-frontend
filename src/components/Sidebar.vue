@@ -276,7 +276,7 @@ export default {
     getFriends() {
       console.log(this.$store.state.auth.token);
       axios({
-        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        headers: { "token": this.$store.state.auth.token },
         url: "api/friends/",
         method: "get",
       }).then((res) => {
@@ -355,9 +355,9 @@ export default {
         this.error_grp_description = "This field is required";
         return;
       } else this.error_grp_description = "";
-
+      console.log(this.$store.state.auth.token);
       axios({
-        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        headers: {"token" : this.$store.state.auth.token },
         url: "api/grp_create/",
         method: "post",
         data: {

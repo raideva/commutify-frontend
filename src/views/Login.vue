@@ -86,14 +86,15 @@ export default {
       }
       else this.error_password = "";
       const data = {
-        username: this.username,
+        user_name: this.username,
         password: this.password,
       };
       this.axios
         .post("auth/login/", data)
         .then((res) => {
           this.setToken({token: res.data.token,username: this.username});
-          this.$router.push('/')
+          console.log(res.data.token);
+          this.$router.push('/');
         })
         .catch((err) => {
           console.log(err);

@@ -99,12 +99,12 @@ export default {
 
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/profileUpdate/",
                     method: "post",
                     data: {
-                        status: this.status,
+                        description: this.status,
                         fname: this.first_name,
                         lname: this.last_name,
                     },

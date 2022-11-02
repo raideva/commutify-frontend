@@ -212,13 +212,14 @@ computed: {
       this.clear();
       if (!this.validate()) return;
       const data = {
-        username: this.username,
-        first_name: this.first_name,
-        last_name: this.last_name,
-        email: this.email,
-        dob: this.dob,
+        user_name: this.username,
+        fname: this.first_name,
+        lname: this.last_name,
+        email_id: this.email,
+        date_of_birth: this.dob,
         password: this.password,
       };
+      console.log(String(this.dob))
       this.axios
         .post("auth/register/", data)
         .then(() => {
@@ -231,23 +232,23 @@ computed: {
         this.$router.push('../');}
         )
         .catch((err) => {console.log(err.response.data);
-        if(typeof err.response.data["username"] != "undefined")
-        this.error_username = err.response.data["username"][0];
+        if(typeof err.response.data["user_name"] != "undefined")
+        this.error_username = err.response.data["user_name"];
 
-        if(typeof err.response.data["first_name"] != "undefined")
-        this.error_first_name = err.response.data["first_name"][0];
+        if(typeof err.response.data["fname"] != "undefined")
+        this.error_first_name = err.response.data["fname"];
 
-        if(typeof err.response.data["last_name"] != "undefined")
-        this.error_last_name = err.response.data["last_name"][0];
+        if(typeof err.response.data["lname"] != "undefined")
+        this.error_last_name = err.response.data["lname"];
 
-        if(typeof err.response.data["dob"] != "undefined")
-        this.error_dob = err.response.data["dob"][0];
+        if(typeof err.response.data["date_of_birth"] != "undefined")
+        this.error_dob = err.response.data["date_of_birth"];
 
-        if(typeof err.response.data["email"] != "undefined")
-        this.error_email = err.response.data["email"][0];
+        if(typeof err.response.data["email_id"] != "undefined")
+        this.error_email = err.response.data["email_id"];
 
         if(typeof err.response.data["password"] != "undefined")
-        this.error_password = err.response.data["password"][0];
+        this.error_password = err.response.data["password"];
         
         });
     },
