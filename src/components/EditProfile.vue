@@ -122,7 +122,7 @@ export default {
             
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/profileImageUpdate/",
                     method: "post",

@@ -63,12 +63,12 @@ export default {
     removefriend(username) {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/fr_remove/",
         method: "post",
         data: {
-          username: username,
+          user_name: username,
         },
       })
         .then((res) => {
@@ -80,12 +80,12 @@ export default {
     exitGroup(id) {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/grp_exit/",
         method: "post",
         data: {
-          id: id,
+          group_id: id,
         },
       })
         .then((res) => {

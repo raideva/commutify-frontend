@@ -108,7 +108,7 @@ export default {
     },
     getChats() {
       axios({
-        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        headers: { "token": this.$store.state.auth.token },
         url: "api/retrieve_message/",
         method: "post",
         data: {

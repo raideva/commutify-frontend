@@ -286,7 +286,7 @@ export default {
     },
     getGroups() {
       axios({
-        headers: { Authorization: "Token " + this.$store.state.auth.token },
+        headers: { "token": this.$store.state.auth.token },
         url: "api/groups/",
         method: "get",
       }).then((res) => {
@@ -373,7 +373,7 @@ export default {
           } else {
             axios({
               headers: {
-                Authorization: "Token " + this.$store.state.auth.token,
+                "token": this.$store.state.auth.token,
               },
               url: "api/groupImageUpdate/",
               method: "post",

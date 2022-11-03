@@ -19,7 +19,7 @@
         </v-flex>
 
         <v-card v-for="item in requests" :key="item.index" class="cards" @click="show(item)" dark>
-            <div class="text-h5" v-if="item.type">
+            <div class="text-h5" v-if="item.type === '1'">
                 <v-card-title> {{ item.name }} </v-card-title>
                 <v-card-text class="text-h7">
                     Description : <i> {{ item.description }} </i>
@@ -63,7 +63,7 @@ export default {
         },
 
         show(a) {
-            var st = a.type === 1 ? a.name : a.username;
+            var st = a.type === "1" ? a.name : a.username;
             this.$fire({
                 title: "Accept request from " + st + " ?",
                 showCloseButton: true,
@@ -86,7 +86,7 @@ export default {
         getRequests() {
             axios({
                 headers: {
-                    Authorization: "Token " + this.$store.state.auth.token
+                    "token": this.$store.state.auth.token
                 },
                 url: "api/requests/",
                 method: "get",
@@ -97,7 +97,7 @@ export default {
         grpResponse(id, bool) {
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/grp_response/",
                     method: "post",
@@ -116,12 +116,12 @@ export default {
         frResponse(username, bool) {
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/fr_response/",
                     method: "post",
                     data: {
-                        username: username,
+                        user_name: username,
                         bool: bool,
                     },
                 })

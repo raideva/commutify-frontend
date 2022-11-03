@@ -150,12 +150,12 @@ export default {
         removefriend() {
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/fr_remove/",
                     method: "post",
                     data: {
-                        username: this.$route.params.username,
+                        user_name: this.$route.params.username,
                     },
                 })
                 .then(() => {
