@@ -155,7 +155,7 @@ export default {
     },
     created() {
         this.getRequests();
-        this.makeConnection();
+        // this.makeConnection();
     },
 };
 </script>

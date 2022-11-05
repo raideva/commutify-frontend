@@ -168,7 +168,7 @@ export default {
     created() {
         this.checkFriend();
         this.getDetails();
-        this.makeConnection();
+        // this.makeConnection();
         this.getProfileImage();
     },
 };

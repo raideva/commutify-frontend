@@ -285,14 +285,6 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          this.requestSocket.send(
-            JSON.stringify({
-              username: this.new_username,
-              id: this.id,
-              type: 1,
-            })
-          );
-          
         })
         .catch((e) => {
           console.log(e);
@@ -301,19 +293,10 @@ export default {
         });
         this.Close();
     },
-    // makeConnection() {
-    //   this.requestSocket = new WebSocket(
-    //     `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
-    //   );
-    //   this.requestSocket.onclose = function (e) {
-    //     console.error("Chat socket closed unexpectedly", e);
-    //   };
-    // },
   },
   watch: {
     id: function () {
       this.getList();
-      this.makeConnection();
     },
   },
 };

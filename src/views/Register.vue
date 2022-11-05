@@ -229,7 +229,9 @@ computed: {
           type: "success",
           timer: 10000
         });
-        this.$router.push('../');}
+        this.$emit('close', );
+
+      }
         )
         .catch((err) => {console.log(err.response.data);
         if(typeof err.response.data["user_name"] != "undefined")
