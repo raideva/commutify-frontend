@@ -265,6 +265,51 @@ export default {
         }
       );
     },
+    CreateGroup() {
+       if (this.grrp_name === "") {
+         this.error_grp_rname = "This field is required";
+         return;
+       } else this.error_grp_name = "";
+       if (this.grp_description === "") {
+         this.error_grp_description = "This field is required";
+         return;
+       } else this.error_grp_description = "";
+       console.log(this.$store.state.auth.token);
+       axios({
+         headers: {"token" : this.$store.state.auth.token },
+         url: "api/grp_create/",
+         method: "post",
+         data: {
+           name: this.grp_name,
+           description: this.grp_description,
+         },
+       })
+         .then((res) => {
+           this.create_dialog = false;
+           console.log(res.data.id);
+           if (this.img1 === "") {
+             this.$router.go();
+           } else {
+             axios({
+               headers: {
+                 "token": this.$store.state.auth.token,
+               },
+               url: "api/groupImageUpdate/",
+               method: "post",
+               data: {
+                 img_url: this.img1,
+                 grp_id: res.data.id,
+               },
+             })
+               .then((res) => {
+                 console.log(res);
+                 this.$router.go();
+               })
+               .catch((e) => console.log(e));
+           }
+         })
+         .catch((e) => console.log(e));
+     },
 
     clearMessage() {
       this.filter = "";
