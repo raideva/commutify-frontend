@@ -89,12 +89,12 @@ export default {
 
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/groupUpdate/",
                     method: "post",
                     data: {
-                        id: this.id,
+                        group_id: this.id,
                         name: this.cur_grp_name,
                         description: this.cur_grp_description,
                     },
@@ -111,7 +111,7 @@ export default {
             else {
             axios({
                     headers: {
-                        Authorization: "Token " + this.$store.state.auth.token
+                        "token": this.$store.state.auth.token
                     },
                     url: "api/groupImageUpdate/",
                     method: "post",

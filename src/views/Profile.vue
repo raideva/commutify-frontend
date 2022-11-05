@@ -117,14 +117,14 @@ export default {
                 .catch(() => (this.isSent = true));
         },
 
-        makeConnection() {
-            this.requestSocket = new WebSocket(
-                `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
-            );
-            this.requestSocket.onclose = function (e) {
-                console.error("Chat socket closed unexpectedly", e);
-            };
-        },
+        // makeConnection() {
+        //     this.requestSocket = new WebSocket(
+        //         `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
+        //     );
+        //     this.requestSocket.onclose = function (e) {
+        //         console.error("Chat socket closed unexpectedly", e);
+        //     };
+        // },
 
         checkFriend() {
             if (this.$route.params.username === this.$store.state.auth.username) {

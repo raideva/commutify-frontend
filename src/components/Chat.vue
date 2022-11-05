@@ -44,6 +44,8 @@
 import Navbar from "./Navbar.vue";
 import axios from "axios";
 import Message from "./Message.vue";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 export default {
   name: "Chat",
@@ -70,8 +72,7 @@ export default {
         "mdi-emoticon-sad",
         "mdi-emoticon-tongue",
       ],
-      chatSocket: null,
-      sendChatSocket: null,
+      isConnected: 0
     };
   },
   methods: {
@@ -80,17 +81,7 @@ export default {
     },
     sendMessage() {
       this.resetIcon();
-      // this.chatSocket.send(
-      //   JSON.stringify({
-      //     message: this.message,
-      //   })
-      // );
-      this.sendChatSocket.send(
-        JSON.stringify({
-          message: this.message,
-          room: this.title,
-        })
-      );
+      this.send(this.message);
       var objDiv = document.getElementsByClassName("renderedChats")[0];
       objDiv.scrollTop = objDiv.scrollHeight;
       this.clearMessage();
@@ -124,27 +115,33 @@ export default {
         })
         .catch((e) => console.log(e));
     },
+    send(ms) {
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = { "data": ms , "room": this.title, "sender": this.$store.state.auth.username};
+        this.stompClient.send("/app/hello/" + this.$store.state.auth.username, JSON.stringify(msg), {});
+      }
+    },
     makeConnection() {
-      // var self = this;
-      // this.chatSocket = new WebSocket(
-      //   `ws://127.0.0.1:8000/ws/chat/${this.title}/${this.$store.state.auth.token}/`
-      // );
-      // this.chatSocket.onmessage = function (e) {
-      //   const d = JSON.parse(e.data);
-      //   console.log(d,'called')
-      //   // self.msgs.push(d);
-      //   console.log(d,'call')
-      // };
-      // this.chatSocket.onclose = function (e) {
-      //   console.error("Chat socket closed unexpectedly", e);
-      // };
-
-      this.sendChatSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
+      if(this.isConnected === 0){
+      this.socket = new SockJS("http://localhost:8080/gs-guide-websocket");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        {},
+        frame => {
+          console.log(frame);
+          this.isConnected = 1;
+          this.stompClient.subscribe("/topic/greetings/" + this.$store.state.auth.token, tick => {
+            if(this.title === JSON.parse(tick.body).room){
+            this.msgs.push(JSON.parse(tick.body));
+            }
+            console.log(this.msgs);
+          });
+        },
+        error => {
+          console.log(error);
+        }
       );
-      this.sendChatSocket.onclose = function (e) {
-        console.error("SendChat socket closed unexpectedly", e);
-      };
+      }
     },
     scroll() {
       const el = document.getElementsByClassName("renderedChats")[0];
@@ -156,9 +153,7 @@ export default {
         }
       };
     },
-    addMsg() {
-      this.msgs.push(this.newMsg);
-    },
+    
   },
 
   computed: {

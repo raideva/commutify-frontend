@@ -6,7 +6,7 @@
         v-model="addMemberDialog"
         max-width="800px"
         transition="dialog-bottom-transition"
-        v-if="you.isAdmin"
+        v-if="you.isAdmin==='1'"
         persistent
       >
         <template v-slot:activator="{ on, attrs }">
@@ -69,7 +69,7 @@
               {{ you.first_name }} {{ you.last_name }}
               <v-row align="center" justify="end">
                 <v-chip color="blue">You</v-chip>
-                <v-chip color="red" v-if="you.isAdmin">Admin</v-chip>
+                <v-chip color="red" v-if="you.isAdmin==='1'">Admin</v-chip>
                 <v-chip color="green" v-else>Member</v-chip>
               </v-row>
             </v-card-text>
@@ -93,10 +93,10 @@
               </template>
 
               <v-list>
-                <v-list-item dark v-if="you.isAdmin">
+                <v-list-item dark v-if="you.isAdmin==='1'">
                   <v-btn dark @click="Remove(user.username)">Remove</v-btn>
                 </v-list-item>
-                <v-list-item v-if="you.isAdmin">
+                <v-list-item v-if="you.isAdmin==='1'">
                   <v-btn dark @click="dismissAdmin(user.username)"
                     >Dismiss Admin</v-btn
                   >
@@ -134,10 +134,10 @@
               </template>
 
               <v-list>
-                <v-list-item v-if="you.isAdmin">
+                <v-list-item v-if="you.isAdmin==='1'">
                   <v-btn dark @click="Remove(user.username)">Remove</v-btn>
                 </v-list-item>
-                <v-list-item v-if="you.isAdmin">
+                <v-list-item v-if="you.isAdmin==='1'">
                   <v-btn dark @click="makeAdmin(user.username)"
                     >Make Group Admin</v-btn
                   >
@@ -195,19 +195,19 @@ export default {
     getList() {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/groupMemberList/",
         method: "post",
         data: {
-          id: this.id,
+          group_id: this.id,
         },
       })
         .then((res) => {
           this.members = res.data["members"];
           this.admins = res.data["admins"];
           this.you = res.data["user"][0];
-          if (this.you.isAdmin) {
+          if (this.you.isAdmin==="1") {
             this.$emit("update_isAdmin");
           }
         })
@@ -216,13 +216,13 @@ export default {
     Remove(username) {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/grp_member_remove/",
         method: "post",
         data: {
-          id: this.id,
-          username: username,
+          grp_id: this.id,
+          user_name: username,
         },
       })
         .then((res) => {
@@ -234,13 +234,13 @@ export default {
     makeAdmin(username) {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/grp_admin_create/",
         method: "post",
         data: {
-          id: this.id,
-          username: username,
+          grp_id: this.id,
+          user_name: username,
         },
       })
         .then((res) => {
@@ -252,13 +252,13 @@ export default {
     dismissAdmin(username) {
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/grp_admin_remove/",
         method: "post",
         data: {
-          id: this.id,
-          username: username,
+          grp_id: this.id,
+          user_name: username,
         },
       })
         .then((res) => {
@@ -274,13 +274,13 @@ export default {
       }
       axios({
         headers: {
-          Authorization: "Token " + this.$store.state.auth.token,
+          "token": this.$store.state.auth.token,
         },
         url: "api/grp_request/",
         method: "post",
         data: {
-          id: this.id,
-          username: this.new_username,
+          grp_id: this.id,
+          user_name: this.new_username,
         },
       })
         .then((res) => {
@@ -292,22 +292,23 @@ export default {
               type: 1,
             })
           );
-          this.Close();
+          
         })
         .catch((e) => {
           console.log(e);
           console.log(e.response.data);
           this.error_message = e.response.data["error"];
         });
+        this.Close();
     },
-    makeConnection() {
-      this.requestSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
-      );
-      this.requestSocket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly", e);
-      };
-    },
+    // makeConnection() {
+    //   this.requestSocket = new WebSocket(
+    //     `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
+    //   );
+    //   this.requestSocket.onclose = function (e) {
+    //     console.error("Chat socket closed unexpectedly", e);
+    //   };
+    // },
   },
   watch: {
     id: function () {

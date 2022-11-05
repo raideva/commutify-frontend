@@ -9,8 +9,8 @@
       "
     >
       <p v-show="isFriend" class="sender"><i>{{ message.sender }}</i></p>
-      <p class="msg">{{ message.message }}</p>
-      <p class="time">{{ getFormattedDate(message.dttime) }}</p>
+      <p class="msg">{{ message.data }}</p>
+      <!-- <p class="time">{{ getFormattedDate(message.time) }}</p> -->
     </div>
   </div>
 </template>

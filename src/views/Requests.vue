@@ -102,7 +102,7 @@ export default {
                     url: "api/grp_response/",
                     method: "post",
                     data: {
-                        id: id,
+                        group_id: id,
                         bool: bool,
                     },
                 })
@@ -131,21 +131,21 @@ export default {
                 })
                 .catch((e) => console.log(e));
         },
-        makeConnection() {
-            var self = this;
-            this.requestSocket = new WebSocket(
-                `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
-            );
+        // makeConnection() {
+        //     var self = this;
+        //     this.requestSocket = new WebSocket(
+        //         `ws://127.0.0.1:8000/ws/requests/${this.$store.state.auth.token}/`
+        //     );
 
-            this.requestSocket.onmessage = function (e) {
-                console.log(e.data);
-                self.requests.push(JSON.parse(e.data));
-            };
+        //     this.requestSocket.onmessage = function (e) {
+        //         console.log(e.data);
+        //         self.requests.push(JSON.parse(e.data));
+        //     };
 
-            this.requestSocket.onclose = function (e) {
-                console.error("Chat socket closed unexpectedly", e);
-            };
-        },
+        //     this.requestSocket.onclose = function (e) {
+        //         console.error("Chat socket closed unexpectedly", e);
+        //     };
+        // },
         viewProfile() {
             this.axios
                 .get(`api/profile/${this.search_username}/`)

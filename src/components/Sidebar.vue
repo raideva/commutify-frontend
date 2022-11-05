@@ -313,84 +313,6 @@ export default {
       this.setToken({ token: null, username: null });
       this.$router.push("main/");
     },
-    makeConnection() {
-      var self = this;
-      this.chatSocket = new WebSocket(
-        `ws://127.0.0.1:8000/ws/message/${this.$store.state.auth.token}/`
-      );
-      this.chatSocket.onmessage = function (e) {
-        var d = JSON.parse(e.data);
-        self.$emit("msg", d);
-        if (self.$store.state.auth.username != d["sender"]) {
-          for (var i = 0; i < self.friends.length; i++) {
-            if (self.friends[i].room == d["room"]) {
-              self.friends[i].unseen++;
-              let frd = self.friends[i];
-              self.friends.splice(i, 1);
-              self.friends.unshift(frd);
-            }
-          }
-          console.log(d["room"]);
-          for (var j = 0; j < self.groups.length; j++) {
-            if (self.groups[j].room == d["room"]) {
-              self.groups[j].unseen++;
-              let grp = self.groups[j];
-              self.groups.splice(j, 1);
-              self.groups.unshift(grp);
-            }
-          }
-        }
-      };
-      this.chatSocket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly", e);
-      };
-    },
-
-    CreateGroup() {
-      if (this.grrp_name === "") {
-        this.error_grp_rname = "This field is required";
-        return;
-      } else this.error_grp_name = "";
-      if (this.grp_description === "") {
-        this.error_grp_description = "This field is required";
-        return;
-      } else this.error_grp_description = "";
-      console.log(this.$store.state.auth.token);
-      axios({
-        headers: {"token" : this.$store.state.auth.token },
-        url: "api/grp_create/",
-        method: "post",
-        data: {
-          name: this.grp_name,
-          description: this.grp_description,
-        },
-      })
-        .then((res) => {
-          this.create_dialog = false;
-          console.log(res.data.id);
-          if (this.img1 === "") {
-            this.$router.go();
-          } else {
-            axios({
-              headers: {
-                "token": this.$store.state.auth.token,
-              },
-              url: "api/groupImageUpdate/",
-              method: "post",
-              data: {
-                img_url: this.img1,
-                grp_id: res.data.id,
-              },
-            })
-              .then((res) => {
-                console.log(res);
-                this.$router.go();
-              })
-              .catch((e) => console.log(e));
-          }
-        })
-        .catch((e) => console.log(e));
-    },
     viewProfile() {
       this.$router.push(
         "../profile/" + String(this.$store.state.auth.username)
@@ -403,7 +325,7 @@ export default {
   created() {
     this.getFriends();
     this.getGroups();
-    this.makeConnection();
+    // this.makeConnection();
   },
 };
 </script>
