@@ -11,7 +11,7 @@ import firebase from 'firebase'
  
 Vue.use(VueSimpleAlert);
 
-axios.defaults.baseURL = 'http://localhost:8080/'
+axios.defaults.baseURL = 'https://localhost:8080/'
 
 Vue.use(VueAxios, axios)
 

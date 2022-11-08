@@ -123,7 +123,7 @@ export default {
     },
     makeConnection() {
       if(this.isConnected === 0){
-      this.socket = new SockJS("http://localhost:8080/gs-guide-websocket");
+      this.socket = new SockJS("https://localhost:8080/gs-guide-websocket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
         {},
